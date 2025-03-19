@@ -10,8 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('role_id')->nullable()->constrained('roles')->nullOnDelete();
+        Schema::create('answers', function (Blueprint $table) {
+            $table->id();
+            $table->string('answer_text');
+            $table->boolean('is_correct')->default(false);
+            $table->foreignId('question_id')->constrained()->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 
@@ -20,9 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['role_id']);
-            $table->dropColumn('role_id');
-        });
+        Schema::dropIfExists('answers');
     }
 };

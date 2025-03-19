@@ -1,20 +1,35 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/admin', [HomeController::class, 'admin'])->name('admin.dashboard');
+    });
+
+    Route::middleware('role:teacher')->group(function () {
+        Route::get('/teacher', [HomeController::class, 'teacher'])->name('teacher.dashboard');
+    });
+
+    Route::middleware('role:student')->group(function () {
+        Route::get('/student', [HomeController::class, 'student'])->name('student.dashboard');
+    });
 });
-
-require __DIR__.'/auth.php';
+Route::resource('courses', CourseController::class)->middleware('auth');
+Route::prefix('courses/{course}/tests')->group(function () {
+    Route::get('/', [TestController::class, 'index'])->name('courses.tests.index');
+    Route::get('/create', [TestController::class, 'create'])->name('courses.tests.create');
+    Route::post('/store', [TestController::class, 'store'])->name('courses.tests.store');
+});
+require __DIR__ . '/auth.php';

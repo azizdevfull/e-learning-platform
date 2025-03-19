@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -45,4 +46,25 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // app/Models/User.php
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role->name === 'admin';
+    }
+
+    public function isTeacher()
+    {
+        return $this->role->name === 'teacher';
+    }
+
+    public function isStudent()
+    {
+        return $this->role->name === 'student';
+    }
+
 }
