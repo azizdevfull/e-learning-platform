@@ -14,8 +14,10 @@
                     </div>
                     <a href="{{ route('teacher.courses.index') }}"
                         class="inline-flex items-center justify-center rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
                         Ortga
                     </a>
@@ -23,7 +25,7 @@
 
                 <!-- Form -->
                 <div class="rounded-lg border bg-white shadow-sm p-6">
-                    <form action="{{ route('teacher.courses.store') }}" method="POST">
+                    <form action="{{ route('teacher.courses.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="space-y-6">
                             <!-- Course Title -->
@@ -56,7 +58,8 @@
                                     required>
                                     <option value="" disabled selected>Kategoriyani tanlang</option>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
@@ -65,7 +68,15 @@
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
-
+                            <div>
+                                <label for="image" class="block text-sm font-medium text-gray-700">Tavsif</label>
+                                <input type="file" id="image" name="image"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary sm:text-sm @error('image') border-red-500 @enderror"
+                                    required>
+                                @error('image')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
                             <!-- Buttons -->
                             <div class="flex gap-4">
                                 <button type="submit"

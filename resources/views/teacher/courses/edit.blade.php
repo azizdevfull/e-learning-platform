@@ -25,14 +25,16 @@
 
                 <!-- Form -->
                 <div class="rounded-lg border bg-white shadow-sm p-6">
-                    <form action="{{ route('teacher.courses.update', $course->id) }}" method="POST">
+                    <form action="{{ route('teacher.courses.update', $course->id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="space-y-6">
                             <!-- Course Title -->
                             <div>
                                 <label for="title" class="block text-sm font-medium text-gray-700">Kurs nomi</label>
-                                <input type="text" id="title" name="title" value="{{ old('title', $course->title) }}"
+                                <input type="text" id="title" name="title"
+                                    value="{{ old('title', $course->title) }}"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary sm:text-sm @error('title') border-red-500 @enderror"
                                     required>
                                 @error('title')
@@ -59,7 +61,8 @@
                                     required>
                                     <option value="" disabled>Kategoriyani tanlang</option>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" {{ old('category_id', $course->category_id) == $category->id ? 'selected' : '' }}>
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id', $course->category_id) == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
@@ -68,7 +71,28 @@
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
-
+                            <div>
+                                <label for="image" class="block text-sm font-medium text-gray-700">Tavsif</label>
+                                <input type="file" id="image" name="image"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary sm:text-sm @error('image') border-red-500 @enderror"
+                                    required>
+                                @error('image')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="mt-4">
+                                <img src="{{ $course->image ? url('storage/' . $course->image) : '' }}" width="100"
+                                    alt="{{ $course->title }}" class="max-w-full h-auto mb-4" id="preview">
+                            </div>
+                            <script>
+                                document.getElementById('image').addEventListener('change', function() {
+                                    let reader = new FileReader();
+                                    reader.onload = function(e) {
+                                        document.getElementById('preview').src = e.target.result;
+                                    }
+                                    reader.readAsDataURL(this.files[0]);
+                                });
+                            </script>
                             <!-- Buttons -->
                             <div class="flex gap-4">
                                 <button type="submit"

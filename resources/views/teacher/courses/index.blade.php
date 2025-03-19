@@ -14,7 +14,8 @@
                     </div>
                     <a href="{{ route('teacher.courses.create') }}"
                         class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                         </svg>
                         Yangi kurs qo‘shish
@@ -36,6 +37,7 @@
                                 <th class="px-4 py-3">#</th>
                                 <th class="px-4 py-3">Nomi</th>
                                 <th class="px-4 py-3">Kategoriya</th>
+                                <th class="px-4 py-3">Rasm</th>
                                 <th class="px-4 py-3 text-right">Amallar</th>
                             </tr>
                         </thead>
@@ -45,6 +47,10 @@
                                     <td class="px-4 py-3 text-sm text-gray-500">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-3 font-medium">{{ $course->title }}</td>
                                     <td class="px-4 py-3 text-sm text-gray-500">{{ $course->category->name }}</td>
+                                    <td class="px-4 py-3">
+                                        <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}"
+                                            class="h-10 w-10 object-cover rounded-full">
+                                    </td>
                                     <td class="px-4 py-3 text-right flex justify-end gap-2">
                                         <a href="{{ route('teacher.courses.show', $course->id) }}"
                                             class="inline-flex items-center rounded-md bg-primary px-3 py-1 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
@@ -54,7 +60,8 @@
                                             class="inline-flex items-center rounded-md bg-secondary px-3 py-1 text-sm font-medium text-white hover:bg-secondary-hover focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2">
                                             Tahrirlash
                                         </a>
-                                        <form action="{{ route('teacher.courses.destroy', $course->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('teacher.courses.destroy', $course->id) }}" method="POST"
+                                            class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -67,7 +74,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-4 py-3 text-center text-gray-500">Hozircha kurslar yo‘q</td>
+                                    <td colspan="4" class="px-4 py-3 text-center text-gray-500">Hozircha kurslar yo‘q
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>

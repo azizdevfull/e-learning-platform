@@ -12,9 +12,8 @@ abstract class Controller
     public function deletePhoto($path)
     {
         $fullpath = storage_path('app/public/' . $path);
-        // info('deleting' . $fullpath);
         if (file_exists($fullpath)) {
-            unlink($fullpath);
+            @unlink($fullpath);
         }
 
     }

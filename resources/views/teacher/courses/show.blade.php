@@ -50,6 +50,11 @@
                             <h3 class="text-lg font-semibold text-gray-900">Tavsif</h3>
                             <p class="text-gray-600">{{ $course->description ?? 'Tavsif mavjud emas' }}</p>
                         </div>
+                        <div class="md:col-span-2">
+                            <h3 class="text-lg font-semibold text-gray-900">Rasmi</h3>
+                            <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}"
+                                class="h-40  object-cover rounded-lg">
+                        </div>
                     </div>
                     <div class="mt-6">
                         <a href="{{ route('teacher.courses.lessons.index', $course) }}"

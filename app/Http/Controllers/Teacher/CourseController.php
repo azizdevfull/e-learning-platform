@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
@@ -35,14 +36,16 @@ class CourseController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         Course::create([
             'title' => $request->title,
             'description' => $request->description,
             'category_id' => $request->category_id,
-            'teacher_id' => auth()->id()
+            'teacher_id' => Auth::id(),
+            'image' => $this->uploadFile($request->file('image'), 'courses')
         ]);
 
         return redirect()->route('teacher.courses.index')->with('success', 'Course muvaffaqiyatli yaratildi!');
@@ -61,8 +64,16 @@ class CourseController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+        if ($request->hasFile('image')) {
+            $this->deletePhoto($course->image);
+            $course->update([
+                'image' => $this->uploadFile($request->file('image'), 'courses')
+            ]);
+        }
 
         $course->update([
             'title' => $request->title,
@@ -76,7 +87,9 @@ class CourseController extends Controller
     // Course'ni o‘chirish
     public function destroy(Course $course)
     {
+        $this->deletePhoto($course->image);
         $course->delete();
+
         return redirect()->route('teacher.courses.index')->with('success', 'Course muvaffaqiyatli o‘chirildi!');
     }
 }
