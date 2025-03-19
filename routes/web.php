@@ -5,6 +5,7 @@ use App\Http\Controllers\Student\EnrollmentController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\StudentCourseController;
 use App\Http\Controllers\Student\StudentLessonController;
+use App\Http\Controllers\Student\StudentTestController;
 use App\Http\Controllers\Student\TestResultController;
 use App\Http\Controllers\Student\TestSubmissionController;
 use App\Http\Controllers\Teacher\AnswerController;
@@ -71,6 +72,11 @@ Route::middleware(['auth'])->group(function () {
 
             // Darslarni ko‘rish
             Route::get('/courses/{course}/lessons/{lesson}', [StudentLessonController::class, 'show'])->name('lessons.show');
+
+            // Testlar
+            Route::get('/tests', [StudentTestController::class, 'index'])->name('tests.index');
+            // Route::get('/tests/{test}/result', [StudentTestController::class, 'result'])->name('tests.result');
+
         });
     });
 });
