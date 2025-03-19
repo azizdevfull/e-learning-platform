@@ -30,6 +30,9 @@
                         <a class="nav-link" href="{{ route('teacher.courses.index') }}">Kurslar</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('teacher.tests.index') }}">Testlar</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('teacher.questions.index') }}">Savollar</a>
                     </li>
                     <li class="nav-item">

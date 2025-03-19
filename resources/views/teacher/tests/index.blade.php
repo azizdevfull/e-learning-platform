@@ -1,24 +1,31 @@
 @extends('layouts.teacher')
 
 @section('content')
-    <h2>{{ $course->title }} - Testlar</h2>
-    <a href="{{ route('teacher.courses.tests.create', $course->id) }}" class="btn btn-primary mb-3">+ Yangi Test</a>
+    <h2>Testlar</h2>
+    <a href="{{ route('teacher.tests.create') }}" class="btn btn-success mb-3">Yangi Test</a>
 
-    <ul class="list-group">
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Test nomi</th>
+            <th>Kurs</th>
+            <th>Harakatlar</th>
+        </tr>
         @foreach($tests as $test)
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ $test->title }}
-                <div>
-                    <a href="{{ route('teacher.courses.tests.edit', [$course->id, $test->id]) }}"
-                        class="btn btn-warning btn-sm">Tahrirlash</a>
-                    <form action="{{ route('teacher.courses.tests.destroy', [$course->id, $test->id]) }}" method="post"
-                        class="d-inline">
+            <tr>
+                <td>{{ $test->id }}</td>
+                <td>{{ $test->title }}</td>
+                <td>{{ $test->course->title }}</td>
+                <td>
+                    <a href="{{ route('teacher.tests.show', $test) }}" class="btn btn-info">Ko'rish</a>
+                    <a href="{{ route('teacher.tests.edit', $test) }}" class="btn btn-warning">Tahrirlash</a>
+                    <form action="{{ route('teacher.tests.destroy', $test) }}" method="post" class="d-inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">O'chirish</button>
+                        <button type="submit" class="btn btn-danger">O'chirish</button>
                     </form>
-                </div>
-            </li>
+                </td>
+            </tr>
         @endforeach
-    </ul>
+    </table>
 @endsection

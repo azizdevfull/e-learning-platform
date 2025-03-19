@@ -25,6 +25,7 @@
                         <td>{{ $course->title }}</td>
                         <td>{{ $course->category->name }}</td>
                         <td>
+                            <a href="{{ route('teacher.courses.show', $course->id) }}" class="btn btn-primary">Korish</a>
                             <a href="{{ route('teacher.courses.edit', $course->id) }}" class="btn btn-primary">Tahrirlash</a>
                             <form action="{{ route('teacher.courses.destroy', $course->id) }}" method="POST" class="d-inline">
                                 @csrf

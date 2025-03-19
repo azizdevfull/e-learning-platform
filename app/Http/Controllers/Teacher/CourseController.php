@@ -16,6 +16,12 @@ class CourseController extends Controller
         return view('teacher.courses.index', compact('courses'));
     }
 
+    public function show($id)
+    {
+        $course = Course::findOrFail($id);
+        return view('teacher.courses.show', compact('course'));
+    }
+
     // Yangi course yaratish formasi
     public function create()
     {

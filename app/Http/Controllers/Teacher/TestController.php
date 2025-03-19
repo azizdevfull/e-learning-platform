@@ -9,57 +9,79 @@ use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
-    public function index($course_id)
+    /**
+     * Display a listing of the tests.
+     */
+    public function index()
     {
-        $course = Course::findOrFail($course_id);
-        $tests = $course->tests;
-
-        return view('teacher.tests.index', compact('course', 'tests'));
+        $tests = Test::with('course')->get();
+        return view('teacher.tests.index', compact('tests'));
     }
 
-    public function create($course_id)
+    /**
+     * Show the form for creating a new test.
+     */
+    public function create()
     {
-        $course = Course::findOrFail($course_id);
-        return view('teacher.tests.create', compact('course'));
+        $courses = Course::all();
+        // dd($courses);
+        return view('teacher.tests.create', compact('courses'));
     }
 
-    public function store(Request $request, $course_id)
+    /**
+     * Store a newly created test in the database.
+     */
+    public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255'
+            'title' => 'required|string|max:255',
+            'course_id' => 'required|exists:courses,id',
         ]);
 
-        Test::create([
-            'title' => $request->title,
-            'course_id' => $course_id
-        ]);
+        Test::create($request->all());
 
-        return redirect()->route('teacher.courses.tests.index', $course_id);
+        return redirect()->route('teacher.tests.index')->with('success', 'Test muvaffaqiyatli yaratildi!');
     }
 
-    public function edit($course_id, $test_id)
+    /**
+     * Display the specified test.
+     */
+    public function show(Test $test)
     {
-        $test = Test::findOrFail($test_id);
-        return view('teacher.tests.edit', compact('test'));
+        return view('teacher.tests.show', compact('test'));
     }
 
-    public function update(Request $request, $course_id, $test_id)
+    /**
+     * Show the form for editing the specified test.
+     */
+    public function edit(Test $test)
+    {
+        $courses = Course::all();
+        return view('teacher.tests.edit', compact('test', 'courses'));
+    }
+
+    /**
+     * Update the specified test in the database.
+     */
+    public function update(Request $request, Test $test)
     {
         $request->validate([
-            'title' => 'required|string|max:255'
+            'title' => 'required|string|max:255',
+            'course_id' => 'required|exists:courses,id',
         ]);
 
-        $test = Test::findOrFail($test_id);
-        $test->update($request->only('title'));
+        $test->update($request->all());
 
-        return redirect()->route('teacher.courses.tests.index', $course_id);
+        return redirect()->route('teacher.tests.index')->with('success', 'Test muvaffaqiyatli yangilandi!');
     }
 
-    public function destroy($course_id, $test_id)
+    /**
+     * Remove the specified test from the database.
+     */
+    public function destroy(Test $test)
     {
-        $test = Test::findOrFail($test_id);
         $test->delete();
 
-        return redirect()->route('teacher.courses.tests.index', $course_id);
+        return redirect()->route('teacher.tests.index')->with('success', 'Test muvaffaqiyatli o‘chirildi!');
     }
 }

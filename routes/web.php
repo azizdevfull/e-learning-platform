@@ -31,20 +31,11 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('courses', CourseController::class);
             Route::resource('courses.lessons', LessonController::class);
 
-            Route::prefix('/courses/{course}/tests')->name('courses.tests.')->group(function () {
-                Route::get('/', [TestController::class, 'index'])->name('index');
-                Route::get('/create', [TestController::class, 'create'])->name('create');
-                Route::post('/store', [TestController::class, 'store'])->name('store');
-                Route::get('/{test}/edit', [TestController::class, 'edit'])->name('edit');
-                Route::put('/{test}/update', [TestController::class, 'update'])->name('update');
-                Route::delete('/{test}', [TestController::class, 'destroy'])->name('destroy');
-            });
+            Route::resource('tests', TestController::class);
+
 
             Route::resource('questions', QuestionController::class);
             Route::resource('answers', AnswerController::class);
-
-
-
 
         });
     });
