@@ -50,6 +50,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/statistics', [CourseStatisticsController::class, 'index'])->name('statistics.index');
             Route::get('/statistics/course/{course}', [CourseStatisticsController::class, 'courseDetails'])->name('statistics.course.details');
             Route::get('/statistics/test/{test}', [CourseStatisticsController::class, 'testStatistics'])->name('statistics.test.details');
+            Route::get('/profile', [TeacherController::class, 'profile'])->name('profile');
+            Route::post('/profile/update', [TeacherController::class, 'updateProfile'])->name('profile.update');
 
         });
     });

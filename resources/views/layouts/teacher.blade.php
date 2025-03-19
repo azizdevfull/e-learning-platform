@@ -126,7 +126,7 @@
                             d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
-                <a href="index.html" class="flex items-center">
+                <a href="{{ route('teacher.dashboard') }}" class="flex items-center">
                     <span class="text-xl font-bold text-primary">EduTeach</span>
                 </a>
             </div>
@@ -163,7 +163,7 @@
                             <p class="text-sm font-medium">{{ Auth::user()->name }}</p>
                             <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
                         </div>
-                        <a href="profile.html"
+                        <a href="{{ route('teacher.profile') }}"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
 
                         <form method="POST" action="{{ route('logout') }}">
@@ -242,7 +242,7 @@
             </div>
 
             <div class="p-4 border-t">
-                <a href="#"
+                {{-- <a href="#"
                     class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -252,7 +252,7 @@
                             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <span>Sozlamalar</span>
-                </a>
+                </a> --}}
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit"

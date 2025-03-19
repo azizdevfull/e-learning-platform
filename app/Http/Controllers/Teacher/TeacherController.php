@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Test;
 use App\Models\TestResult;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
@@ -111,5 +112,30 @@ class TeacherController extends Controller
             'upcomingTests',
             'recentStudents'
         ));
+    }
+    public function profile()
+    {
+        $teacher = Auth::user();
+        return view('teacher.profile', compact('teacher'));
+    }
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+
+        $teacher = Auth::user();
+        $teacher->name = $request->name;
+        $teacher->email = $request->email;
+
+        if ($request->filled('password')) {
+            $teacher->password = bcrypt($request->password);
+        }
+
+        $teacher->save();
+
+        return redirect()->back()->with('success', 'Profil muvaffaqiyatli yangilandi!');
     }
 }
