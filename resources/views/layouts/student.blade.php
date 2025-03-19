@@ -136,7 +136,7 @@
                         <span>Dashboard</span>
                     </a>
                     <a href="{{ route('student.courses.index') }}"
-                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('student.courses.index') ? 'bg-primary text-white' : 'hover:bg-sidebar-hover text-gray-600 hover:text-gray-900' }}">
+                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('student.courses.*') ? 'bg-primary text-white' : 'hover:bg-sidebar-hover text-gray-600 hover:text-gray-900' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -145,7 +145,7 @@
                         <span>Kurslar</span>
                     </a>
                     <a href="{{ route('student.tests.index') }}"
-                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('student.tests.index') ? 'bg-primary text-white' : 'hover:bg-sidebar-hover text-gray-600 hover:text-gray-900' }}">
+                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('student.tests.*') ? 'bg-primary text-white' : 'hover:bg-sidebar-hover text-gray-600 hover:text-gray-900' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
