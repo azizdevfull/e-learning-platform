@@ -14,7 +14,7 @@ class EnrollmentController extends Controller
     {
         $courses = Course::all();
         $categories = Category::all();
-        return view('student.courses.index', compact('courses', 'categories'));
+        return view('courses.index', compact('courses', 'categories'));
     }
 
     public function enroll($courseId)

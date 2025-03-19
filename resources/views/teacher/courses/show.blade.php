@@ -19,5 +19,9 @@
                     onclick="return confirm('O‘chirishga ishonchingiz komilmi?')">O‘chirish</button>
             </form>
         </td>
+
+        <a href="{{ route('teacher.courses.lessons.index', $course) }}">
+            <button class="btn btn-primary">Darslar</button>
+        </a>
     </div>
 @endsection

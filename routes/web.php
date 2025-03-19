@@ -79,8 +79,15 @@ Route::middleware(['auth'])->group(function () {
 
         });
     });
+
+
 });
-Route::resource('courses', CourseController::class)->middleware('auth');
+// Route::resource('courses', CourseController::class)->middleware('auth');
+
+Route::get('/courses', [EnrollmentController::class, 'index'])->name('courses.index');
+
+
+
 Route::prefix('courses/{course}/tests')->group(function () {
     Route::get('/', [TestController::class, 'index'])->name('courses.tests.index');
     Route::get('/create', [TestController::class, 'create'])->name('courses.tests.create');
