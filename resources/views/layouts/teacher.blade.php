@@ -39,6 +39,9 @@
                         <a class="nav-link" href="{{ route('teacher.answers.index') }}">Javoblar</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('teacher.statistics.index') }}">Statistikalar</a>
+                    </li>
+                    <li class="nav-item">
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
                             <button type="submit" class="btn btn-danger">Logout</button>
@@ -48,6 +51,7 @@
             </div>
         </div>
     </nav>
+
 
     <!-- Content -->
     <div class="container">

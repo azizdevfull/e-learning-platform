@@ -3,10 +3,12 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Student\EnrollmentController;
 use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Student\TestResultController;
 use App\Http\Controllers\Student\TestSubmissionController;
 use App\Http\Controllers\Teacher\AnswerController;
 use App\Http\Controllers\Teacher\CategoryController;
 use App\Http\Controllers\Teacher\CourseController;
+use App\Http\Controllers\Teacher\CourseStatisticsController;
 use App\Http\Controllers\Teacher\LessonController;
 use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Teacher\TeacherController;
@@ -39,6 +41,10 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('questions', QuestionController::class);
             Route::resource('answers', AnswerController::class);
 
+            Route::get('/statistics', [CourseStatisticsController::class, 'index'])->name('statistics.index');
+            Route::get('/statistics/course/{course}', [CourseStatisticsController::class, 'courseDetails'])->name('statistics.course.details');
+            Route::get('/statistics/test/{test}', [CourseStatisticsController::class, 'testStatistics'])->name('statistics.test.details');
+
         });
     });
 
@@ -52,6 +58,8 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/courses', [EnrollmentController::class, 'index'])->name('courses.index');
             Route::post('/courses/{course}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
+            Route::get('/results', [TestResultController::class, 'index'])->name('results.index');
+
         });
     });
 });
