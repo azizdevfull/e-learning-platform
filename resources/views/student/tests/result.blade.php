@@ -1,11 +1,13 @@
-<!-- resources/views/student/tests/result.blade.php -->
-
 @extends('layouts.student')
 
 @section('content')
-    <h2>{{ $test->title }} - Natijalar</h2>
+    <h2>Test Natijasi: {{ $test->title }}</h2>
 
-    <p>Sizning ballingiz: <strong>{{ $score }}%</strong></p>
+    @if ($latestResult)
+        <p>Oxirgi ball: {{ $latestResult->score }}%</p>
+    @endif
 
-    <a href="{{ route('student.dashboard') }}">Dashboardga qaytish</a>
+    <p>Umumiy natija: {{ $score }}%</p>
+
+    <a href="{{ route('student.dashboard') }}">Ortga qaytish</a>
 @endsection

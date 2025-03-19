@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Test;
 use App\Models\Question;
 use App\Models\Answer;
+use App\Models\TestResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,13 +38,26 @@ class TestSubmissionController extends Controller
         $totalQuestions = $test->questions->count();
         $score = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
 
-        return redirect()->route('student.tests.result', $test)->with('score', $score);
+        // TestResult modeliga saqlash
+        TestResult::create([
+            'user_id' => Auth::id(),
+            'test_id' => $test->id,
+            'score' => $score
+        ]);
+
+        return redirect()->route('student.tests.result', $test->id)->with('score', $score);
     }
 
     public function result(Test $test)
     {
         $score = session('score');
 
-        return view('student.tests.result', compact('test', 'score'));
+        // Testning so'nggi natijasini olish
+        $latestResult = TestResult::where('user_id', Auth::id())
+            ->where('test_id', $test->id)
+            ->latest()
+            ->first();
+
+        return view('student.tests.result', compact('test', 'score', 'latestResult'));
     }
 }

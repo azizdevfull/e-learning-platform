@@ -11,7 +11,6 @@ class StudentController extends Controller
 {
     public function dashboard()
     {
-        // O'quvchining yozilgan kurslari
         $courses = Auth::user()->courses;
 
         return view('student.dashboard', compact('courses'));
@@ -19,7 +18,9 @@ class StudentController extends Controller
     public function index()
     {
         $enrolledCourses = Auth::user()->courses;
-        $tests = Test::all();
+        $tests = $enrolledCourses->flatMap(function ($course) {
+            return $course->tests;
+        });
 
         return view('student.dashboard', compact('enrolledCourses', 'tests'));
     }
