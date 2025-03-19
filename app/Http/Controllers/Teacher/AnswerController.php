@@ -61,11 +61,4 @@ class AnswerController extends Controller
         return redirect()->route('teacher.answers.index')
             ->with('success', 'Javob o‘chirildi!');
     }
-    public function destroyApi($id)
-    {
-        info($id);
-        $answer = Answer::find($id);
-        $answer->delete();
-        return response()->json(['success' => true]);
-    }
 }

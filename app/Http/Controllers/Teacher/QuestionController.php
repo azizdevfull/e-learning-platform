@@ -37,7 +37,7 @@ class QuestionController extends Controller
 
         Question::create($request->only('question_text', 'test_id'));
 
-        return redirect()->route('teacher.questions.index')
+        return redirect()->route('teacher.tests.show', $request->test_id)
             ->with('success', 'Savol muvaffaqiyatli qo‘shildi!');
     }
 
