@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Student\EnrollmentController;
+use App\Http\Controllers\Student\TestSubmissionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Teacher\AnswerController;
 use App\Http\Controllers\Teacher\CategoryController;
@@ -41,8 +43,17 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware('role:student')->group(function () {
-        Route::get('/student', [StudentController::class, 'index'])->name('student.index');
-        Route::post('/student/logout', [StudentController::class, 'logout'])->name('student.logout');
+        Route::prefix('student')->name('student.')->group(function () {
+            Route::get('/', [StudentController::class, 'index'])->name('dashboard');
+            Route::post('/logout', [StudentController::class, 'logout'])->name('logout');
+            Route::get('/tests/{test}', [TestSubmissionController::class, 'show'])->name('tests.show');
+            Route::post('/tests/{test}/submit', [TestSubmissionController::class, 'submit'])->name('tests.submit');
+            Route::get('/tests/{test}/result', [TestSubmissionController::class, 'result'])->name('tests.result');
+
+            Route::get('/courses', [EnrollmentController::class, 'index'])->name('courses.index');
+            Route::post('/courses/{course}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
+        });
+
 
     });
 });
