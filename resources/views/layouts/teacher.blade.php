@@ -176,18 +176,18 @@
         <div class="flex flex-col h-full">
             <div class="p-4 border-b">
                 <div class="flex items-center space-x-3">
-                    <img src="#" alt="Teacher" class="h-12 w-12 rounded-full">
+                    <img src="{{ asset('images/default-profile.png') }}" alt="Teacher" class="h-12 w-12 rounded-full">
                     <div>
                         <h3 class="font-medium">{{ Auth::user()->name }}</h3>
-                        <p class="text-xs text-gray-500">Matematika o'qituvchisi</p>
+                        <p class="text-xs text-gray-500">O'qituvchi</p>
                     </div>
                 </div>
             </div>
 
             <div class="flex-1 overflow-auto p-4">
                 <nav class="space-y-1">
-                    <a href="index.html"
-                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors bg-primary text-white">
+                    <a href="{{ route('teacher.dashboard') }}"
+                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('teacher.dashboard') ? 'bg-primary text-white' : 'hover:bg-sidebar-hover text-gray-600 hover:text-gray-900' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -195,8 +195,8 @@
                         </svg>
                         <span>Dashboard</span>
                     </a>
-                    <a href="courses.html"
-                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
+                    <a href="{{ route('teacher.courses.index') }}"
+                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('teacher.courses.index') ? 'bg-primary text-white' : 'hover:bg-sidebar-hover text-gray-600 hover:text-gray-900' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -204,8 +204,8 @@
                         </svg>
                         <span>Kurslar</span>
                     </a>
-                    <a href="tests.html"
-                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
+                    <a href="{{ route('teacher.tests.index') }}"
+                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('teacher.tests.index') ? 'bg-primary text-white' : 'hover:bg-sidebar-hover text-gray-600 hover:text-gray-900' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -213,8 +213,8 @@
                         </svg>
                         <span>Testlar</span>
                     </a>
-                    <a href="students.html"
-                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
+                    <a href="{{ route('teacher.statistics.index') }}"
+                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('teacher.statistics.index') ? 'bg-primary text-white' : 'hover:bg-sidebar-hover text-gray-600 hover:text-gray-900' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -222,8 +222,8 @@
                         </svg>
                         <span>Talabalar</span>
                     </a>
-                    <a href="statistics.html"
-                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
+                    <a href="{{ route('teacher.statistics.index') }}"
+                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('teacher.statistics.index') ? 'bg-primary text-white' : 'hover:bg-sidebar-hover text-gray-600 hover:text-gray-900' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -235,7 +235,7 @@
             </div>
 
             <div class="p-4 border-t">
-                <a href="settings.html"
+                <a href="#"
                     class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -246,15 +246,18 @@
                     </svg>
                     <span>Sozlamalar</span>
                 </a>
-                <a href="#"
-                    class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                    </svg>
-                    <span>Chiqish</span>
-                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900 w-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        <span>Chiqish</span>
+                    </button>
+                </form>
             </div>
         </div>
     </aside>
