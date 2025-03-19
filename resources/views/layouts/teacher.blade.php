@@ -132,7 +132,7 @@
             </div>
 
             <div class="flex items-center space-x-2">
-                <div class="hidden md:block relative w-64">
+                {{-- <div class="hidden md:block relative w-64">
                     <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-2 top-2.5 h-4 w-4 text-gray-400"
                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -140,8 +140,8 @@
                     </svg>
                     <input type="text" placeholder="Qidirish..."
                         class="pl-8 pr-4 py-2 w-full rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                </div>
-                <button id="notification-btn" class="p-2 rounded-md hover:bg-gray-100 relative tooltip">
+                </div> --}}
+                {{-- <button id="notification-btn" class="p-2 rounded-md hover:bg-gray-100 relative tooltip">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -150,10 +150,11 @@
                     <span
                         class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full">3</span>
                     <span class="tooltiptext">Bildirishnomalar</span>
-                </button>
+                </button> --}}
                 <div class="relative">
                     <button id="profile-menu-btn" class="p-1 rounded-full hover:bg-gray-100 tooltip">
-                        <img src="#" alt="Profile" class="h-8 w-8 rounded-full">
+                        <img src="{{ asset(path: 'images/default-profile.png') }}" alt="Profile"
+                            class="h-8 w-8 rounded-full">
                         <span class="tooltiptext">Profil</span>
                     </button>
                     <div id="profile-dropdown"
@@ -164,10 +165,12 @@
                         </div>
                         <a href="profile.html"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
-                        <a href="settings.html"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sozlamalar</a>
-                        <div class="border-t border-gray-100"></div>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Chiqish</a>
+
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full">Chiqish</button>
+                        </form>
                     </div>
                 </div>
             </div>
