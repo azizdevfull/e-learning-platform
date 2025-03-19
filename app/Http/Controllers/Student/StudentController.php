@@ -17,12 +17,31 @@ class StudentController extends Controller
     }
     public function index()
     {
-        $enrolledCourses = Auth::user()->courses;
-        $tests = $enrolledCourses->flatMap(function ($course) {
-            return $course->tests;
-        });
+        $student = Auth::user();
 
-        return view('student.dashboard', compact('enrolledCourses', 'tests'));
+        // Talabaning kurslari
+        $courses = $student->courses()->get();
+
+        // Test natijalari (oxirgi 7 kun ichidagi)
+        $recentTests = $student->testResults()
+            ->with('test')
+            ->where('created_at', '>=', now()->subDays(7))
+            ->latest()
+            ->get();
+
+        // Statistikalar
+        $totalCourses = $courses->count();
+        $totalTests = $student->testResults()->count();
+        $averageScore = $student->testResults()->avg('score'); // Foiz sifatida
+
+        return view('student.dashboard', compact(
+            'student',
+            'courses',
+            'recentTests',
+            'totalCourses',
+            'totalTests',
+            'averageScore'
+        ));
     }
 
     public function logout()
