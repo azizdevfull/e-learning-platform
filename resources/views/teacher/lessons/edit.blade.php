@@ -1,17 +1,32 @@
 @extends('layouts.teacher')
 
 @section('content')
-    <h2>Darsni tahrirlash</h2>
+    <h2>Darsni tahrirlash: {{ $lesson->title }}</h2>
 
-    <form action="{{ route('teacher.courses.lessons.update', [$lesson->course_id, $lesson->id]) }}" method="post">
+    <form action="{{ route('teacher.courses.lessons.update', [$course->id, $lesson->id]) }}" method="POST"
+        enctype="multipart/form-data">
         @csrf
         @method('PUT')
-        <input type="text" name="title" value="{{ $lesson->title }}" required>
-        <textarea name="content" required>{{ $lesson->content }}</textarea>
-        <input type="url" name="video_url" value="{{ $lesson->video_url }}" placeholder="Video URL (ixtiyoriy)">
-        <button type="submit">Yangilash</button>
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Dars nomi</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ $lesson->title }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="content" class="form-label">Dars matni</label>
+            <textarea class="form-control" id="content" name="content" required>{{ $lesson->content }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="file" class="form-label">Fayl yuklash (PDF, DOCX, MP4, JPG, PNG)</label>
+            <input type="file" class="form-control" id="file" name="file">
+            @if($lesson->file_path)
+                <p>Hozirgi fayl: <a href="{{ asset('storage/' . $lesson->file_path) }}" target="_blank">Ko‘rish/Yuklab olish</a>
+                </p>
+            @endif
+        </div>
+
+        <button type="submit" class="btn btn-primary">Yangilash</button>
     </form>
-
-
-
 @endsection

@@ -24,48 +24,79 @@ class LessonController extends Controller
     }
 
 
-    public function store(Request $request, $course_id)
+    public function store(Request $request, $courseId)
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required',
-            'video_url' => 'nullable|url'
+            'content' => 'required|string',
+            'file' => 'nullable|file|mimes:pdf,docx,mp4,jpg,png|max:20480',
         ]);
+
+        $filePath = null;
+        if ($request->hasFile('file')) {
+            $filePath = $this->uploadFile($request->file('file'));
+        }
 
         Lesson::create([
             'title' => $request->title,
             'content' => $request->content,
-            'video_url' => $request->video_url,
-            'course_id' => $course_id
+            'file_path' => $filePath,
+            'course_id' => $courseId,
         ]);
 
-        return redirect()->route('teacher.courses.lessons.index', $course_id);
+        return redirect()->route('teacher.courses.lessons.index', $courseId)
+            ->with('success', 'Dars muvaffaqiyatli qo‘shildi!');
     }
 
-    public function edit($course_id, $lesson_id)
+    public function show($lessonId)
     {
-        $lesson = Lesson::findOrFail($lesson_id);
-        return view('teacher.lessons.edit', compact('lesson'));
+        $lesson = Lesson::findOrFail($lessonId);
+
+        return view('teacher.lessons.show', compact('lesson'));
+    }
+    public function edit($courseId, $lessonId)
+    {
+        $course = Course::findOrFail($courseId);
+        $lesson = Lesson::findOrFail($lessonId);
+
+        return view('teacher.lessons.edit', compact('course', 'lesson'));
     }
 
 
-    public function update(Request $request, $course_id, $lesson_id)
+
+    public function update(Request $request, $courseId, $lessonId)
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required',
-            'video_url' => 'nullable|url'
+            'content' => 'required|string',
+            'file' => 'nullable|file|mimes:pdf,docx,mp4,jpg,png|max:20480',
         ]);
 
-        $lesson = Lesson::findOrFail($lesson_id);
-        $lesson->update($request->only(['title', 'content', 'video_url']));
+        $lesson = Lesson::findOrFail($lessonId);
 
-        return redirect()->route('teacher.courses.lessons.index', $course_id);
+        $filePath = $lesson->file_path;
+        if ($request->hasFile('file')) {
+            if ($filePath) {
+                $this->deletePhoto($lesson->file_path);
+            }
+            $filePath = $this->uploadFile($request->file('file'));
+        }
+
+        $lesson->update([
+            'title' => $request->title,
+            'content' => $request->content,
+            'file_path' => $filePath,
+        ]);
+
+        return redirect()->route('teacher.courses.lessons.index', $courseId)
+            ->with('success', 'Dars muvaffaqiyatli yangilandi!');
     }
+
 
     public function destroy($course_id, $lesson_id)
     {
         $lesson = Lesson::findOrFail($lesson_id);
+        $this->deletePhoto($lesson->file_path);
         $lesson->delete();
 
         return redirect()->route('teacher.courses.lessons.index', $course_id);

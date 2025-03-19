@@ -29,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [TeacherController::class, 'index'])->name('dashboard');
             Route::resource('categories', CategoryController::class);
             Route::resource('courses', CourseController::class);
-            Route::resource('courses.lessons', LessonController::class)->except(['show']);
+            Route::resource('courses.lessons', LessonController::class);
 
             Route::prefix('/courses/{course}/tests')->name('courses.tests.')->group(function () {
                 Route::get('/', [TestController::class, 'index'])->name('index');
