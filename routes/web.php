@@ -84,11 +84,8 @@ Route::middleware(['auth'])->group(function () {
 
         });
     });
-
-
 });
-// Route::resource('courses', CourseController::class)->middleware('auth');
-
+// xamma kurslar ro'yxati qoshilish uchun
 Route::get('/courses', [EnrollmentController::class, 'index'])->name('courses.index');
 
 

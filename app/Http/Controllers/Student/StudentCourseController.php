@@ -6,14 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StudentCourseController extends Controller
 {
     // Kurslar ro'yxati
     public function index()
     {
-        $categories = Category::with('courses')->get();
-        return view('student.courses.index', compact('categories'));
+        $courses = Auth::user()->courses()->with('category')->paginate(10);
+        return view('student.courses.index', compact('courses'));
     }
 
     // Kurs detallari
