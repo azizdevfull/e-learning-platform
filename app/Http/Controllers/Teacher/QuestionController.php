@@ -51,10 +51,6 @@ class QuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
-        if ($question->test->course->teacher_id !== Auth::id()) {
-            abort(403, 'Bu savol sizga tegishli emas');
-        }
-
         $request->validate([
             'question_text' => 'required|string|max:255',
             'test_id' => 'required|exists:tests,id',

@@ -49,7 +49,7 @@ class TestController extends Controller
     public function show(Test $test)
     {
         // Savollarni va javoblarni birgalikda yuklash
-        $questions = $test->questions()->with('answers')->paginate(1);
+        $questions = $test->questions()->with('answers')->paginate(10);
 
         return view('teacher.tests.show', compact('test', 'questions'));
     }
