@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Teacher\CategoryController;
 use App\Http\Controllers\Teacher\CourseController;
+use App\Http\Controllers\Teacher\LessonController;
 use App\Http\Controllers\Teacher\TeacherController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [TeacherController::class, 'index'])->name('dashboard');
             Route::resource('categories', CategoryController::class);
             Route::resource('courses', CourseController::class);
+            Route::resource('courses.lessons', LessonController::class)->except(['show']);
+
         });
     });
 
