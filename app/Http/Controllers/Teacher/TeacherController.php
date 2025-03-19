@@ -7,14 +7,13 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Test;
 use App\Models\TestResult;
-use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
     public function index()
     {
-        $teacher = auth()->user();
+        $teacher = Auth::user();
 
         // Faqat o'qituvchi ekanligini tekshirish (middleware orqali amalga oshiriladi)
         if (!$teacher->isTeacher()) {

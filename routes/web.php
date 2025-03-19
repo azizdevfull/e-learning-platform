@@ -3,6 +3,8 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Student\EnrollmentController;
 use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
+
 use App\Http\Controllers\Student\StudentCourseController;
 use App\Http\Controllers\Student\StudentLessonController;
 use App\Http\Controllers\Student\StudentTestController;
@@ -39,7 +41,8 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('courses.lessons', LessonController::class);
 
             Route::resource('tests', TestController::class);
-
+            Route::get('/students', [TeacherStudentController::class, 'index'])->name('students.index');
+            Route::get('/students/{id}', [TeacherStudentController::class, 'show'])->name('students.show');
 
             Route::resource('questions', QuestionController::class);
             Route::resource('answers', AnswerController::class);
