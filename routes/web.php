@@ -3,6 +3,8 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Student\EnrollmentController;
 use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Student\StudentCourseController;
+use App\Http\Controllers\Student\StudentLessonController;
 use App\Http\Controllers\Student\TestResultController;
 use App\Http\Controllers\Student\TestSubmissionController;
 use App\Http\Controllers\Teacher\AnswerController;
@@ -56,10 +58,19 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/tests/{test}/submit', [TestSubmissionController::class, 'submit'])->name('tests.submit');
             Route::get('/tests/{test}/result', [TestSubmissionController::class, 'result'])->name('tests.result');
 
-            Route::get('/courses', [EnrollmentController::class, 'index'])->name('courses.index');
+            // xamma kurslar ro'yxati qoshilish uchun
+            // Route::get('/courses', [EnrollmentController::class, 'index'])->name('courses.index');
             Route::post('/courses/{course}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
             Route::get('/results', [TestResultController::class, 'index'])->name('results.index');
 
+            // Kurslar ro'yxati
+            Route::get('/courses', [StudentCourseController::class, 'index'])->name('courses.index');
+
+            // Bitta kursni ko‘rish
+            Route::get('/courses/{course}', [StudentCourseController::class, 'show'])->name('courses.show');
+
+            // Darslarni ko‘rish
+            Route::get('/courses/{course}/lessons/{lesson}', [StudentLessonController::class, 'show'])->name('lessons.show');
         });
     });
 });

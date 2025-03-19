@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Course;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
@@ -12,7 +13,8 @@ class EnrollmentController extends Controller
     public function index()
     {
         $courses = Course::all();
-        return view('student.courses.index', compact('courses'));
+        $categories = Category::all();
+        return view('student.courses.index', compact('courses', 'categories'));
     }
 
     public function enroll($courseId)

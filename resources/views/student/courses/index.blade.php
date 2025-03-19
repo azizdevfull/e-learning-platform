@@ -1,17 +1,15 @@
 @extends('layouts.student')
 
 @section('content')
-    <h2>Barcha kurslar</h2>
-
-    @foreach($courses as $course)
-        <div>
-            <h3>{{ $course->title }}</h3>
-            <p>{{ $course->description }}</p>
-
-            <form action="{{ route('student.courses.enroll', $course->id) }}" method="POST">
-                @csrf
-                <button type="submit">Kursga yozilish</button>
-            </form>
-        </div>
+    <h2>Kurslar</h2>
+    @foreach($categories as $category)
+        <h4>Kategory: {{ $category->name }}</h4>
+        <ul>
+            @foreach($category->courses as $course)
+                <li>
+                    <a href="{{ route('student.courses.show', $course->id) }}">{{ $course->title }}</a>
+                </li>
+            @endforeach
+        </ul>
     @endforeach
 @endsection
