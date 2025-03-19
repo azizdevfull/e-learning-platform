@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Test;
 use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
@@ -14,6 +15,19 @@ class StudentController extends Controller
         $courses = Auth::user()->courses;
 
         return view('student.dashboard', compact('courses'));
+    }
+    public function index()
+    {
+        $enrolledCourses = Auth::user()->courses;
+        $tests = Test::all();
+
+        return view('student.dashboard', compact('enrolledCourses', 'tests'));
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/');
     }
 
     public function showCourse($courseId)

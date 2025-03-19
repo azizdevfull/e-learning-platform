@@ -1,41 +1,49 @@
 <?php
+// App/Http/Controllers/Student/TestSubmissionController.php
 
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Test;
 use App\Models\Question;
+use App\Models\Answer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TestSubmissionController extends Controller
 {
     public function show(Test $test)
     {
-        $questions = $test->questions()->with('answers')->inRandomOrder()->get();
+        $questions = $test->questions()->with('answers')->get();
+
         return view('student.tests.show', compact('test', 'questions'));
     }
 
     public function submit(Request $request, Test $test)
     {
-        $score = 0;
         $correctAnswers = 0;
 
-        foreach ($request->answers as $question_id => $answer_id) {
-            $question = Question::find($question_id);
+        foreach ($test->questions as $question) {
+            $selectedAnswer = $request->input('question_' . $question->id);
 
-            if ($question && $question->answers()->where('id', $answer_id)->where('is_correct', true)->exists()) {
-                $correctAnswers++;
+            if ($selectedAnswer) {
+                $answer = Answer::find($selectedAnswer);
+                if ($answer && $answer->is_correct) {
+                    $correctAnswers++;
+                }
             }
         }
 
-        $score = round(($correctAnswers / $test->questions->count()) * 100);
+        $totalQuestions = $test->questions->count();
+        $score = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
 
-        return redirect()->route('student.tests.result', [$test->id, 'score' => $score]);
+        return redirect()->route('student.tests.result', $test)->with('score', $score);
     }
 
-    public function result(Test $test, Request $request)
+    public function result(Test $test)
     {
-        $score = $request->query('score');
+        $score = session('score');
+
         return view('student.tests.result', compact('test', 'score'));
     }
 }
