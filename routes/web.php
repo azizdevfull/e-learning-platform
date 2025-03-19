@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,9 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware('role:student')->group(function () {
-        Route::get('/student', [HomeController::class, 'student'])->name('student.dashboard');
+        Route::get('/student', [StudentController::class, 'index'])->name('student.index');
+        Route::post('/student/logout', [StudentController::class, 'logout'])->name('student.logout');
+
     });
 });
 Route::resource('courses', CourseController::class)->middleware('auth');
