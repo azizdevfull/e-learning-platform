@@ -11,8 +11,27 @@ export default {
 
     theme: {
         extend: {
+            colors: {
+                primary: {
+                    DEFAULT: '#4F46E5', // Indigo
+                    hover: '#4338CA',
+                },
+                secondary: {
+                    DEFAULT: '#10B981', // Green
+                    hover: '#059669',
+                },
+                pastel: {
+                    blue: '#E0E7FF',
+                    green: '#D1FAE5',
+                    gray: '#F3F4F6',
+                },
+                sidebar: {
+                    DEFAULT: '#F8FAFC',
+                    hover: '#F1F5F9',
+                }
+            },
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', 'sans-serif'],
             },
         },
     },
