@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O'qituvchi Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#4F46E5', // Indigo
+                            hover: '#4338CA',
+                        },
+                        secondary: {
+                            DEFAULT: '#10B981', // Green
+                            hover: '#059669',
+                        },
+                        pastel: {
+                            blue: '#E0E7FF',
+                            green: '#D1FAE5',
+                            gray: '#F3F4F6',
+                        },
+                        sidebar: {
+                            DEFAULT: '#F8FAFC',
+                            hover: '#F1F5F9',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            transform: translateY(150%);
+            transition: transform 0.3s ease;
+            z-index: 50;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+        }
+        
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            transition: transform 0.3s ease;
+            transform: scale(0.95);
+        }
+        
+        .modal.open .modal-content {
+            transform: scale(1);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .spinner {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #4F46E5;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+    <!-- Navbar -->
+    <header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-30">
+        <div class="flex items-center justify-between h-16 px-4 md:px-6">
+            <div class="flex items-center">
+                <button id="menu-toggle" class="md:hidden mr-2 p-2 rounded-md hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <a href="index.html" class="flex items-center">
+                    <span class="text-xl font-bold text-primary">EduTeach</span>
+                </a>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <div class="hidden md:block relative w-64">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-2 top-2.5 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input type="text" placeholder="Qidirish..." class="pl-8 pr-4 py-2 w-full rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <button id="notification-btn" class="p-2 rounded-md hover:bg-gray-100 relative tooltip">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full">3</span>
+                    <span class="tooltiptext">Bildirishnomalar</span>
+                </button>
+                <div class="relative">
+                    <button id="profile-menu-btn" class="p-1 rounded-full hover:bg-gray-100 tooltip">
+                        <img src="https://via.placeholder.com/32" alt="Profile" class="h-8 w-8 rounded-full">
+                        <span class="tooltiptext">Profil</span>
+                    </button>
+                    <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                        <div class="px-4 py-2 border-b">
+                            <p class="text-sm font-medium">Aziza Karimova</p>
+                            <p class="text-xs text-gray-500">aziza@example.com</p>
+                        </div>
+                        <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                        <a href="settings.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sozlamalar</a>
+                        <div class="border-t border-gray-100"></div>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Chiqish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar fixed left-0 top-16 z-20 h-[calc(100vh-4rem)] w-64 bg-sidebar border-r border-gray-200 md:translate-x-0">
+        <div class="flex flex-col h-full">
+            <div class="p-4 border-b">
+                <div class="flex items-center space-x-3">
+                    <img src="https://via.placeholder.com/48" alt="Teacher" class="h-12 w-12 rounded-full">
+                    <div>
+                        <h3 class="font-medium">Aziza Karimova</h3>
+                        <p class="text-xs text-gray-500">Matematika o'qituvchisi</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-auto p-4">
+                <nav class="space-y-1">
+                    <a href="index.html" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors bg-primary text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="courses.html" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        <span>Kurslar</span>
+                    </a>
+                    <a href="tests.html" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                        <span>Testlar</span>
+                    </a>
+                    <a href="students.html" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <span>Talabalar</span>
+                    </a>
+                    <a href="statistics.html" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        <span>Statistika</span>
+                    </a>
+                </nav>
+            </div>
+            
+            <div class="p-4 border-t">
+                <a href="settings.html" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>Sozlamalar</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <span>Chiqish</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="pt-16 md:pl-64">
+        <div class="p-4 md:p-6">
+            <!-- Dashboard Content -->
+            <div class="space-y-6">
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h2 class="text-3xl font-bold tracking-tight">Dashboard</h2>
+                        <p class="text-gray-500">
+                            Xush kelibsiz, Aziza! Bugungi statistikalar va ma'lumotlar.
+                        </p>
+                    </div>
+                    <button id="add-course-btn" class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Yangi kurs qo'shish
+                    </button>
+                </div>
+
+                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <!-- Stat Card 1 -->
+                    <div class="rounded-lg border bg-white p-4 shadow-sm">
+                        <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <h3 class="text-sm font-medium">Kurslar</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        <div class="text-2xl font-bold">8</div>
+                        <p class="text-xs text-gray-500">
+                            2 ta kurs oxirgi 30 kunda qo'shildi
+                        </p>
+                    </div>
+
+                    <!-- Stat Card 2 -->
+                    <div class="rounded-lg border bg-white p-4 shadow-sm">
+                        <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <h3 class="text-sm font-medium">Talabalar</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-2xl font-bold">145</div>
+                        <p class="text-xs text-gray-500">
+                            +22% o'tgan oyga nisbatan
+                        </p>
+                    </div>
+
+                    <!-- Stat Card 3 -->
+                    <div class="rounded-lg border bg-white p-4 shadow-sm">
+                        <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <h3 class="text-sm font-medium">Testlar</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                        </div>
+                        <div class="text-2xl font-bold">32</div>
+                        <p class="text-xs text-gray-500">
+                            5 ta test oxirgi hafta qo'shildi
+                        </p>
+                    </div>
+
+                    <!-- Stat Card 4 -->
+                    <div class="rounded-lg border bg-white p-4 shadow-sm">
+                        <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <h3 class="text-sm font-medium">O'rtacha ball</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                        </div>
+                        <div class="text-2xl font-bold">82%</div>
+                        <p class="text-xs text-gray-500">
+                            +5% o'tgan oyga nisbatan
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                    <!-- Recent Activity -->
+                    <div class="lg:col-span-4 rounded-lg border bg-white shadow-sm">
+                        <div class="p-4 border-b">
+                            <h3 class="font-semibold">So'nggi faoliyat</h3>
+                            <p class="text-sm text-gray-500">
+                                Oxirgi 7 kundagi faoliyatlar
+                            </p>
+                        </div>
+                        <div class="p-4">
+                            <div class="space-y-4">
+                                <!-- Activity 1 -->
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="h-8 w-8 rounded-full bg-pastel-blue flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Yangi kurs qo'shildi: "Algebra asoslari"</p>
+                                        <p class="text-xs text-gray-500">Bugun, 10:30</p>
+                                    </div>
+                                </div>
+
+                                <!-- Activity 2 -->
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="h-8 w-8 rounded-full bg-pastel-green flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Yangi test yaratildi: "Geometriya - 1-bob"</p>
+                                        <p class="text-xs text-gray-500">Kecha, 15:45</p>
+                                    </div>
+                                </div>
+
+                                <!-- Activity 3 -->
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="h-8 w-8 rounded-full bg-pastel-gray flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            </svg>
+                                        </div>
+                                      />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">5 ta yangi talaba ro'yxatdan o'tdi</p>
+                                        <p class="text-xs text-gray-500">2 kun oldin, 09:15</p>
+                                    </div>
+                                </div>
+
+                                <!-- Activity 4 -->
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 mr-3">
+                                        <div class="h-8 w-8 rounded-full bg-pastel-blue flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Statistika yangilandi: "Algebra" kursi</p>
+                                        <p class="text-xs text-gray-500">3 kun oldin, 14:20</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Tests -->
+                    <div class="lg:col-span-3 rounded-lg border bg-white shadow-sm">
+                        <div class="p-4 border-b">
+                            <h3 class="font-semibold">Rejalashtirilgan testlar</h3>
+                            <p class="text-sm text-gray-500">
+                                Keyingi 7 kun uchun rejalashtirilgan testlar
+                            </p>
+                        </div>
+                        <div class="p-4">
+                            <div class="space-y-4">
+                                <!-- Test 1 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium">Algebra - 2-bob</p>
+                                        <p class="text-xs text-gray-500">Ertaga, 10:00</p>
+                                    </div>
+                                    <span class="inline-flex items-center rounded-full bg-pastel-blue px-2.5 py-0.5 text-xs font-medium text-primary">
+                                        25 talaba
+                                    </span>
+                                </div>
+
+                                <!-- Test 2 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium">Geometriya - 1-bob</p>
+                                        <p class="text-xs text-gray-500">Seshanba, 14:30</p>
+                                    </div>
+                                    <span class="inline-flex items-center rounded-full bg-pastel-blue px-2.5 py-0.5 text-xs font-medium text-primary">
+                                        18 talaba
+                                    </span>
+                                </div>
+
+                                <!-- Test 3 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium">Trigonometriya asoslari</p>
+                                        <p class="text-xs text-gray-500">Chorshanba, 09:15</p>
+                                    </div>
+                                    <span class="inline-flex items-center rounded-full bg-pastel-blue px-2.5 py-0.5 text-xs font-medium text-primary">
+                                        30 talaba
+                                    </span>
+                                </div>
+
+                                <a href="tests.html" class="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                                    Barcha testlarni ko'rish
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Students -->
+                <div class="rounded-lg border bg-white shadow-sm">
+                    <div class="p-4 border-b flex justify-between items-center">
+                        <div>
+                            <h3 class="font-semibold">Yangi qo'shilgan talabalar</h3>
+                            <p class="text-sm text-gray-500">
+                                Oxirgi 30 kunda qo'shilgan talabalar
+                            </p>
+                        </div>
+                        <a href="students.html" class="text-sm text-primary hover:underline">
+                            Barchasini ko'rish
+                        </a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <th class="px-4 py-3">Talaba</th>
+                                    <th class="px-4 py-3">Kurs</th>
+                                    <th class="px-4 py-3">Qo'shilgan sana</th>
+                                    <th class="px-4 py-3">Status</th>
+                                    <th class="px-4 py-3 text-right">Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <!-- Student 1 -->
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center">
+                                            <div class="h-8 w-8 rounded-full bg-pastel-gray flex items-center justify-center mr-3">
+                                                <span class="text-sm font-medium text-gray-700">AK</span>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium">Alisher Karimov</p>
+                                                <p class="text-xs text-gray-500">alisher@example.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">Algebra asoslari</td>
+                                    <td class="px-4 py-3 text-sm text-gray-500">15.03.2023</td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                            Faol
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right">
+                                        <button class="text-gray-500 hover:text-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Student 2 -->
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center">
+                                            <div class="h-8 w-8 rounded-full bg-pastel-gray flex items-center justify-center mr-3">
+                                                <span class="text-sm font-medium text-gray-700">MN</span>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium">Malika Nurmatova</p>
+                                                <p class="text-xs text-gray-500">malika@example.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">Geometriya</td>
+                                    <td class="px-4 py-3 text-sm text-gray-500">12.03.2023</td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                            Faol
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right">
+                                        <button class="text-gray-500 hover:text-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Student 3 -->
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center">
+                                            <div class="h-8 w-8 rounded-full bg-pastel-gray flex items-center justify-center mr-3">
+                                                <span class="text-sm font-medium text-gray-700">JT</span>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium">Jasur Toshmatov</p>
+                                                <p class="text-xs text-gray-500">jasur@example.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">Trigonometriya</td>
+                                    <td class="px-4 py-3 text-sm text-gray-500">10.03.2023</td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
+                                            Kutilmoqda
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-right">
+                                        <button class="text-gray-500 hover:text-primary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Course Modal -->
+    <div id="add-course-modal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="flex items-center justify-between p-4 border-b">
+                <h3 class="text-lg font-medium">Yangi kurs qo'shish</h3>
+                <button id="close-course-modal" class="text-gray-400 hover:text-gray-500">
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <form>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="course-name" class="block text-sm font-medium text-gray-700">Kurs nomi</label>
+                            <input type="text" id="course-name" name="course-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" placeholder="Kurs nomini kiriting">
+                        </div>
+                        <div>
+                            <label for="course-description" class="block text-sm font-medium text-gray-700">Tavsif</label>
+                            <textarea id="course-description" name="course-description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" placeholder="Kurs haqida qisqacha ma'lumot"></textarea>
+                        </div>
+                        <div>
+                            <label for="course-category" class="block text-sm font-medium text-gray-700">Kategoriya</label>
+                            <select id="course-category" name="course-category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
+                                <option value="">Kategoriyani tanlang</option>
+                                <option value="algebra">Algebra</option>
+                                <option value="geometry">Geometriya</option>
+                                <option value="trigonometry">Trigonometriya</option>
+                                <option value="calculus">Matematik analiz</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="course-duration" class="block text-sm font-medium text-gray-700">Davomiyligi (hafta)</label>
+                            <input type="number" id="course-duration" name="course-duration" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm" placeholder="Hafta sonini kiriting">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="p-4 border-t flex justify-end space-x-2">
+                <button id="cancel-course" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Bekor qilish
+                </button>
+                <button id="save-course" class="px-4 py-2 bg-primary text-white rounded-md text-sm font-medium hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    Saqlash
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast max-w-md bg-white rounded-lg border border-gray-200 shadow-md p-4">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3 w-0 flex-1">
+                <p class="text-sm font-medium text-gray-900" id="toast-title">Muvaffaqiyatli</p>
+                <p class="mt-1 text-sm text-gray-500" id="toast-description">Amal muvaffaqiyatli bajarildi</p>
+            </div>
+            <div class="ml-4 flex-shrink-0 flex">
+                <button id="close-toast" class="inline-flex text-gray-400 hover:text-gray-500">
+                    <span class="sr-only">Yopish</span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+        
+        // Profile dropdown
+        const profileMenuBtn = document.getElementById('profile-menu-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        
+        profileMenuBtn.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profileMenuBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Toast notification
+        const toast = document.getElementById('toast');
+        const closeToast = document.getElementById('close-toast');
+        const notificationBtn = document.getElementById('notification-btn');
+        
+        function showToast(title, description, duration = 3000) {
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-description').textContent = description;
+            toast.classList.add('show');
+            
+            if (duration > 0) {
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, duration);
+            }
+        }
+        
+        closeToast.addEventListener('click', () => {
+            toast.classList.remove('show');
+        });
+        
+        notificationBtn.addEventListener('click', () => {
+            showToast('Yangi xabar', 'Sizda 3 ta o\'qilmagan xabar bor');
+        });
+        
+        // Add Course Modal
+        const addCourseBtn = document.getElementById('add-course-btn');
+        const addCourseModal = document.getElementById('add-course-modal');
+        const closeCourseModal = document.getElementById('close-course-modal');
+        const cancelCourse = document.getElementById('cancel-course');
+        const saveCourse = document.getElementById('save-course');
+        
+        function openCourseModal() {
+            addCourseModal.classList.add('open');
+        }
+        
+        function closeCourseModalFunc() {
+            addCourseModal.classList.remove('open');
+        }
+        
+        addCourseBtn.addEventListener('click', openCourseModal);
+        closeCourseModal.addEventListener('click', closeCourseModalFunc);
+        cancelCourse.addEventListener('click', closeCourseModalFunc);
+        
+        // Close modal when clicking outside
+        addCourseModal.addEventListener('click', (e) => {
+            if (e.target === addCourseModal) {
+                closeCourseModalFunc();
+            }
+        });
+        
+        // Save course
+        saveCourse.addEventListener('click', () => {
+            // Show loading spinner
+            saveCourse.innerHTML = '<div class="spinner mx-auto"></div>';
+            
+            // Simulate API call
+            setTimeout(() => {
+                closeCourseModalFunc();
+                showToast('Muvaffaqiyatli', 'Yangi kurs muvaffaqiyatli qo\'shildi');
+                saveCourse.innerHTML = 'Saqlash';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
