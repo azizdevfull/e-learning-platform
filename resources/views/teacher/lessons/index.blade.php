@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.teacher')
 
 @section('content')
     <h2>{{ $course->title }} - Darslar</h2>
