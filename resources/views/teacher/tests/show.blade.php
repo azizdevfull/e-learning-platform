@@ -84,11 +84,11 @@
                                         </a>
                                     </h4>
                                 </div>
-
                             </div>
                         @empty
                             <p class="text-gray-500">Hozircha savollar yo‘q</p>
                         @endforelse
+                        {{ $questions->links() }}
                     </div>
                 </div>
             </div>
