@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Teacher\TestController;
@@ -11,7 +13,9 @@ use App\Http\Controllers\Teacher\CourseController;
 use App\Http\Controllers\Teacher\LessonController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Teacher\TeacherController;
+use App\Http\Controllers\Admin\TeacherController as AdminTeacherController;
 use App\Http\Controllers\Teacher\CategoryController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Student\EnrollmentController;
 use App\Http\Controllers\Student\TestResultController;
@@ -28,8 +32,16 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
-    Route::middleware('role:admin')->group(function () {
-        Route::get('/admin', [HomeController::class, 'admin'])->name('admin.dashboard');
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/courses', [AdminController::class, 'courses'])->name('courses.index');
+        Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+        Route::get('/tests', [AdminController::class, 'tests'])->name('tests.index');
+        Route::get('/profile', [AdminController::class, 'tests'])->name('profile');
+        Route::resource('categories', AdminCategoryController::class);
+        Route::resource('teachers', AdminTeacherController::class);
     });
 
     Route::middleware('role:teacher')->group(function () {
