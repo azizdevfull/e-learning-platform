@@ -7,26 +7,6 @@
     <title>EduTeach - @yield('title', 'Onlayn ta\'lim platformasi')</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    {{--
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: { DEFAULT: '#4F46E5', hover: '#4338CA', light: '#E0E7FF' },
-                        secondary: { DEFAULT: '#10B981', hover: '#059669', light: '#D1FAE5' },
-                        accent: { DEFAULT: '#F59E0B', hover: '#D97706', light: '#FEF3C7' },
-                        pastel: { blue: '#E0E7FF', green: '#D1FAE5', amber: '#FEF3C7', purple: '#EDE9FE', pink: '#FCE7F3', gray: '#F3F4F6' },
-                    },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    animation: { 'float': 'float 3s ease-in-out infinite', 'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite' },
-                    keyframes: { float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } } }
-                }
-            }
-        }
-    </script> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Sizning CSS qismlaringiz shu yerda qoladi */
@@ -170,7 +150,7 @@
                     @else
                         <div class="relative" id="user-dropdown">
                             <button class="flex items-center text-sm font-medium text-gray-900 hover:text-primary">
-                                <img src="{{ auth()->user()->profile_photo_url ?? 'https://via.placeholder.com/32' }}"
+                                <img src="{{ auth()->user()->profile_photo_url ?? asset('images/default-profile.png') }}"
                                     alt="User" class="h-8 w-8 rounded-full mr-2">
                                 <span>{{ auth()->user()->name }}</span>
                                 <svg class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -182,9 +162,16 @@
                                 id="user-menu">
                                 <a href="{{ route('dashboard') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
-                                <a href="#"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sozlamalar</a>
+                                @if (auth()->user()->isAdmin())
+                                    <a href="{{ route('admin.profile') }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                                @elseif (auth()->user()->isTeacher())
+                                    <a href="{{ route('teacher.profile') }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                                @elseif (auth()->user()->isStudent())
+                                    <a href="{{ route('student.profile') }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                                @endif
                                 <div class="border-t border-gray-100 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
