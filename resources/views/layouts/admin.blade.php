@@ -232,6 +232,15 @@
                         </svg>
                         <span>Testimoniallar</span>
                     </a>
+                    <a href="{{ route('admin.contacts.index') }}"
+                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('admin.contacts.*') ? 'bg-primary text-white' : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900' }}">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 12c1.104 0 2 .896 2 2s-.896 2-2 2-2-.896-2-2 .896-2 2-2zm0-2c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-4 4c0-1.104-.896-2-2-2s-2 .896-2 2 .896 2 2 2 2-.896 2-2zm-4 0c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" />
+                        </svg>
+                        <span>Kontaktlar</span>
+                    </a>
+
 
                 </nav>
             </div>
