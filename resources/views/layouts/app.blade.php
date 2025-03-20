@@ -146,11 +146,7 @@
                             </button>
                             <div class="dropdown absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 p-2 z-50"
                                 id="categories-menu">
-                                @foreach ($categories as $category)
-                                    <a href="#{{ $category->slug }}"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
-                                        data-category="{{ $category->slug }}">{{ $category->name }}</a>
-                                @endforeach
+                                <x-categories.navbar />
                             </div>
                         </div>
                         <a href="#about" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Biz
@@ -182,7 +178,8 @@
                                 <a href="{{ route('dashboard') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
                                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sozlamalar</a>
+                                <a href="#"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sozlamalar</a>
                                 <div class="border-t border-gray-100 my-1"></div>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -220,7 +217,8 @@
                     </button>
                 </div>
                 <nav class="flex flex-col space-y-2">
-                    <a href="/" class="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Bosh
+                    <a href="/"
+                        class="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Bosh
                         sahifa</a>
                     <a href="#courses"
                         class="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Kurslar</a>
@@ -263,7 +261,8 @@
                         </div>
                         <a href="{{ route('dashboard') }}"
                             class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Dashboard</a>
-                        <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Profil</a>
+                        <a href="#"
+                            class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Profil</a>
                         <a href="#"
                             class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Sozlamalar</a>
                         <div class="border-t border-gray-200 my-2"></div>
@@ -350,7 +349,7 @@
         const categoriesMenu = document.getElementById('categories-menu');
 
         if (categoriesDropdown && categoriesMenu) {
-            categoriesDropdown.addEventListener('click', function (e) {
+            categoriesDropdown.addEventListener('click', function(e) {
                 e.stopPropagation();
                 categoriesMenu.classList.toggle('show');
             });
@@ -361,14 +360,14 @@
         const userMenu = document.getElementById('user-menu');
 
         if (userDropdown && userMenu) {
-            userDropdown.addEventListener('click', function (e) {
+            userDropdown.addEventListener('click', function(e) {
                 e.stopPropagation();
                 userMenu.classList.toggle('show');
             });
         }
 
         // Close dropdowns when clicking outside
-        document.addEventListener('click', function () {
+        document.addEventListener('click', function() {
             if (categoriesMenu) categoriesMenu.classList.remove('show');
             if (userMenu) userMenu.classList.remove('show');
         });
@@ -379,11 +378,11 @@
         const mobileMenu = document.getElementById('mobile-menu');
 
         if (mobileMenuButton && mobileMenu && closeMobileMenuButton) {
-            mobileMenuButton.addEventListener('click', function () {
+            mobileMenuButton.addEventListener('click', function() {
                 mobileMenu.classList.add('show');
             });
 
-            closeMobileMenuButton.addEventListener('click', function () {
+            closeMobileMenuButton.addEventListener('click', function() {
                 mobileMenu.classList.remove('show');
             });
         }
@@ -393,7 +392,7 @@
         const mobileCategoriesMenu = document.getElementById('mobile-categories-menu');
 
         if (mobileCategoriesButton && mobileCategoriesMenu) {
-            mobileCategoriesButton.addEventListener('click', function () {
+            mobileCategoriesButton.addEventListener('click', function() {
                 mobileCategoriesMenu.classList.toggle('hidden');
             });
         }
@@ -436,7 +435,7 @@
 
         // Logout functionality
         if (logoutButton) {
-            logoutButton.addEventListener('click', function (e) {
+            logoutButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 localStorage.setItem('isLoggedIn', 'false');
                 checkLoginStatus();
@@ -444,7 +443,7 @@
         }
 
         if (mobileLogoutButton) {
-            mobileLogoutButton.addEventListener('click', function (e) {
+            mobileLogoutButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 localStorage.setItem('isLoggedIn', 'false');
                 checkLoginStatus();
@@ -457,7 +456,7 @@
         const courseCards = document.querySelectorAll('[data-category]');
 
         categoryPills.forEach(pill => {
-            pill.addEventListener('click', function (e) {
+            pill.addEventListener('click', function(e) {
                 e.preventDefault();
 
                 const category = this.getAttribute('data-category');
@@ -479,8 +478,10 @@
                 });
 
                 // Add active class to clicked pill
-                this.classList.remove('bg-primary-light', 'bg-secondary-light', 'bg-accent-light', 'bg-pastel-purple', 'bg-pastel-pink');
-                this.classList.remove('text-primary', 'text-secondary', 'text-accent', 'text-purple-600', 'text-pink-600');
+                this.classList.remove('bg-primary-light', 'bg-secondary-light', 'bg-accent-light',
+                    'bg-pastel-purple', 'bg-pastel-pink');
+                this.classList.remove('text-primary', 'text-secondary', 'text-accent', 'text-purple-600',
+                    'text-pink-600');
                 this.classList.add('bg-primary', 'text-white');
 
                 // Filter courses
@@ -496,7 +497,7 @@
 
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
 
                 const targetId = this.getAttribute('href');
