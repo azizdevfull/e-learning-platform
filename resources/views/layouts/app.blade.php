@@ -312,16 +312,13 @@
                     </ul>
                 </div>
                 <div class="md:col-span-1">
-                    <h3 class="text-lg font-semibold mb-4">Yangiliklarga obuna bo‘ling</h3>
-                    <p class="text-gray-400 mb-4">Yangi kurslar va maxsus takliflar haqida xabardor bo‘lib turing.</p>
-                    <form class="space-y-2">
-                        <input type="email" placeholder="Email manzilingiz"
-                            class="w-full px-3 py-2 text-gray-900 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
-                        <button type="submit"
-                            class="w-full bg-primary hover:bg-primary-hover text-white font-medium py-2 px-4 rounded-md">Obuna
-                            bo‘lish</button>
-                    </form>
+                    <h3 class="text-lg font-semibold mb-4">Eng ko‘p o‘quvchisi bor kurslar
+                    </h3>
+                    <ul class="space-y-2">
+                        <x-welcome.footer-courses />
+                    </ul>
                 </div>
+
             </div>
             <div class="border-t border-gray-800 mt-12 pt-8">
                 <p class="text-gray-400 text-sm text-center">&copy; {{ date('Y') }} EduTeach. Barcha huquqlar
