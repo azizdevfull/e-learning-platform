@@ -11,7 +11,7 @@ class TestResultController extends Controller
 {
     public function index()
     {
-        $results = TestResult::where('user_id', Auth::id())->with('test')->get();
+        $results = TestResult::where('user_id', Auth::id())->with('test')->paginate(10);
         return view('student.results.index', compact('results'));
     }
 }

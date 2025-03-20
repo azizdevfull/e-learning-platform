@@ -79,9 +79,10 @@
             </div>
 
             <div class="hidden md:flex items-center space-x-1">
-                <a href="dashboard.html" class="px-3 py-2 rounded-md hover:bg-gray-100">Dashboard</a>
-                <a href="courses.html" class="px-3 py-2 rounded-md hover:bg-gray-100">Kurslar</a>
-                <a href="tests.html" class="px-3 py-2 rounded-md hover:bg-gray-100">Testlar</a>
+                <a href="{{ route('student.dashboard') }}" class="px-3 py-2 rounded-md hover:bg-gray-100">Dashboard</a>
+                <a href="{{ route('student.courses.index') }}"
+                    class="px-3 py-2 rounded-md hover:bg-gray-100">Kurslar</a>
+                <a href="{{ route('student.tests.index') }}" class="px-3 py-2 rounded-md hover:bg-gray-100">Testlar</a>
                 <a href="profile.html" class="px-3 py-2 rounded-md hover:bg-gray-100">Profil</a>
             </div>
 
@@ -104,15 +105,18 @@
                 </button>
                 <div class="relative">
                     <button id="profile-menu-btn" class="p-1 rounded-full hover:bg-gray-100">
-                        <img src="https://via.placeholder.com/32" alt="Profile" class="h-8 w-8 rounded-full">
+                        <img src="{{ asset('images/default-profile.png') }}" alt="Profile" class="h-8 w-8 rounded-full">
                     </button>
                     <div id="profile-dropdown"
                         class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                         <a href="profile.html"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sozlamalar</a>
                         <div class="border-t border-gray-100"></div>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Chiqish</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full">Chiqish</button>
+                        </form>
                     </div>
                 </div>
             </div>
