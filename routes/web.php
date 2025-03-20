@@ -10,6 +10,7 @@ use App\Http\Controllers\Student\ForumController;
 use App\Http\Controllers\Teacher\AnswerController;
 
 use App\Http\Controllers\Teacher\CourseController;
+use App\Http\Controllers\Admin\CourseController as AdminCourseController;
 use App\Http\Controllers\Teacher\LessonController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Teacher\TeacherController;
@@ -44,7 +45,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('categories', AdminCategoryController::class);
         Route::resource('teachers', AdminTeacherController::class);
         Route::resource('students', AdminStudentController::class);
-
+        Route::resource('courses', AdminCourseController::class);
+        Route::delete('/courses/{course}/students/{student}', [AdminCourseController::class, 'removeStudent'])->name('courses.remove-student');
     });
 
     Route::middleware('role:teacher')->group(function () {
