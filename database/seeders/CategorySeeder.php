@@ -13,8 +13,14 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::create([
-            'name' => 'Kasblar',
-        ]);
+        $categories = [
+            ['name' => 'Dasturlash'],
+            ['name' => 'Dizayn'],
+            ['name' => 'Marketing'],
+        ];
+
+        foreach ($categories as $category) {
+            Category::create($category);
+        }
     }
 }
