@@ -43,7 +43,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('home');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/profile', [UserController::class, 'tests'])->name('profile');
+        Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
+        Route::post('/profile', [DashboardController::class, 'updateProfile'])->name('profile.update');
         Route::resource('users', UserController::class);
         Route::resource('categories', AdminCategoryController::class);
         Route::resource('teachers', AdminTeacherController::class);
