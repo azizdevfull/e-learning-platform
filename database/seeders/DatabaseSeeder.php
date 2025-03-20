@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             AnswerSeeder::class,
             EnrollmentSeeder::class,
             TestResultSeeder::class,
+            ForumSeeder::class
         ]);
     }
 }

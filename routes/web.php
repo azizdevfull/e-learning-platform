@@ -1,24 +1,26 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Student\EnrollmentController;
-use App\Http\Controllers\Student\StudentController;
-use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
+use App\Http\Controllers\Teacher\TestController;
+use App\Http\Controllers\Teacher\ForumController as TeacherForumController;
+use App\Http\Controllers\Student\ForumController;
+use App\Http\Controllers\Teacher\AnswerController;
 
+use App\Http\Controllers\Teacher\CourseController;
+use App\Http\Controllers\Teacher\LessonController;
+use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Teacher\TeacherController;
+use App\Http\Controllers\Teacher\CategoryController;
+use App\Http\Controllers\Teacher\QuestionController;
+use App\Http\Controllers\Student\EnrollmentController;
+use App\Http\Controllers\Student\TestResultController;
+use App\Http\Controllers\Student\StudentTestController;
 use App\Http\Controllers\Student\StudentCourseController;
 use App\Http\Controllers\Student\StudentLessonController;
-use App\Http\Controllers\Student\StudentTestController;
-use App\Http\Controllers\Student\TestResultController;
 use App\Http\Controllers\Student\TestSubmissionController;
-use App\Http\Controllers\Teacher\AnswerController;
-use App\Http\Controllers\Teacher\CategoryController;
-use App\Http\Controllers\Teacher\CourseController;
 use App\Http\Controllers\Teacher\CourseStatisticsController;
-use App\Http\Controllers\Teacher\LessonController;
-use App\Http\Controllers\Teacher\QuestionController;
-use App\Http\Controllers\Teacher\TeacherController;
-use App\Http\Controllers\Teacher\TestController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -53,6 +55,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/profile', [TeacherController::class, 'profile'])->name('profile');
             Route::post('/profile/update', [TeacherController::class, 'updateProfile'])->name('profile.update');
 
+            Route::get('/courses/{course}/forum', [TeacherForumController::class, 'index'])->name('forum.index');
+            Route::get('/courses/{course}/forum/{thread}', [TeacherForumController::class, 'show'])->name('forum.show');
+            Route::post('/courses/{course}/forum/{thread}/posts', [TeacherForumController::class, 'storePost'])->name('forum.post.store');
+            Route::delete('/courses/{course}/forum/{thread}/posts/{post}', [TeacherForumController::class, 'destroyPost'])->name('forum.post.destroy');
         });
     });
 
@@ -83,6 +89,13 @@ Route::middleware(['auth'])->group(function () {
             // Route::get('/tests/{test}/result', [StudentTestController::class, 'result'])->name('tests.result');
             Route::get('/profile', [StudentController::class, 'profile'])->name('profile');
             Route::post('/profile', [StudentController::class, 'updateProfile'])->name('profile.update');
+            Route::get('/courses/{course}/forum', [ForumController::class, 'index'])->name('forum.index');
+            Route::post('/courses/{course}/forum', [ForumController::class, 'storeThread'])->name('forum.store');
+            Route::get('/courses/{course}/forum/{thread}', [ForumController::class, 'show'])->name('forum.show');
+            Route::post('/courses/{course}/forum/{thread}/posts', [ForumController::class, 'storePost'])->name('forum.post.store');
+
+            Route::put('/courses/{course}/forum/{thread}/posts/{post}', [ForumController::class, 'updatePost'])->name('forum.post.update');
+
         });
     });
 });
