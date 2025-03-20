@@ -21,11 +21,16 @@ class EnrollmentController extends Controller
             });
         }
 
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
         $courses = $query->paginate(6);
         $categories = Category::all();
 
         return view('courses.index', compact('courses', 'categories'));
     }
+
 
 
     public function enroll($courseId)
