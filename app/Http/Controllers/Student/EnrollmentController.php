@@ -31,7 +31,13 @@ class EnrollmentController extends Controller
         return view('courses.index', compact('courses', 'categories'));
     }
 
-
+    public function show(Course $course)
+    {
+        $course->load('category', 'lessons', 'students', 'teacher'); // Bog‘liq ma’lumotlarni yuklash
+        $isEnrolled = Auth::check() && Auth::user()->courses()->where('course_id', $course->id)->exists();
+        // $categories = Category::all();
+        return view('courses.show', compact('course', 'isEnrolled'));
+    }
 
     public function enroll($courseId)
     {

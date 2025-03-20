@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -25,7 +26,7 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        $role = auth()->user()->role->name;
+        $role = Auth::user()->role->name;
         // dd($role);
         if ($role == 'admin') {
             return redirect()->route('admin.dashboard');

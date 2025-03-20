@@ -128,7 +128,7 @@ Route::middleware(['auth'])->group(function () {
 });
 // xamma kurslar ro'yxati qoshilish uchun
 Route::get('/courses', [EnrollmentController::class, 'index'])->name('courses.index');
-
+Route::get('/courses/{course}', [EnrollmentController::class, 'show'])->name('courses.show');
 
 
 Route::prefix('courses/{course}/tests')->group(function () {

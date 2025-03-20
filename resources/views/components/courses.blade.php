@@ -45,7 +45,8 @@
                                 class="h-8 w-8 rounded-full mr-2">
                             <span class="text-sm font-medium">{{ $course->teacher->name }}</span>
                         </div>
-                        <a href="#" class="text-primary hover:text-primary-hover font-medium text-sm">Batafsil</a>
+                        <a href="{{ route('courses.show', $course->id) }}"
+                            class="text-primary hover:text-primary-hover font-medium text-sm">Batafsil</a>
                     </div>
                 </div>
             </div>

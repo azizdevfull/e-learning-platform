@@ -1,3 +1,4 @@
+{{-- resources/views/courses/index.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
@@ -92,8 +93,8 @@
                                     class="h-8 w-8 rounded-full mr-2">
                                 <span class="text-sm font-medium">Aziza Karimova</span>
                             </div>
-                            <a href="#">
-                                <span class="font-bold text-primary">Toliq</span>
+                            <a href="{{ route('courses.show', $course) }}">
+                                <span class="font-bold text-primary">Batafsil</span>
                             </a>
                         </div>
                     </div>

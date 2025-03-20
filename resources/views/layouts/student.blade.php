@@ -79,6 +79,7 @@
             </div>
 
             <div class="hidden md:flex items-center space-x-1">
+                <a href="{{ route('home') }}" class="px-3 py-2 rounded-md hover:bg-gray-100">Saytga o'tish</a>
                 <a href="{{ route('student.dashboard') }}" class="px-3 py-2 rounded-md hover:bg-gray-100">Dashboard</a>
                 <a href="{{ route('student.courses.index') }}" class="px-3 py-2 rounded-md hover:bg-gray-100">Mening
                     Kurslarim</a>
