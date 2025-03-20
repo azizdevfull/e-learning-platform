@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcha kurslar - EduTeach</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#4F46E5', // Indigo
+                            hover: '#4338CA',
+                            light: '#E0E7FF',
+                        },
+                        secondary: {
+                            DEFAULT: '#10B981', // Green
+                            hover: '#059669',
+                            light: '#D1FAE5',
+                        },
+                        accent: {
+                            DEFAULT: '#F59E0B', // Amber
+                            hover: '#D97706',
+                            light: '#FEF3C7',
+                        },
+                        pastel: {
+                            blue: '#E0E7FF',
+                            green: '#D1FAE5',
+                            amber: '#FEF3C7',
+                            purple: '#EDE9FE',
+                            pink: '#FCE7F3',
+                            gray: '#F3F4F6',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .category-pill {
+            transition: all 0.3s ease;
+        }
+        
+        .category-pill:hover {
+            transform: scale(1.05);
+        }
+        
+        .dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+        }
+        
+        .dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.show {
+            transform: translateX(0);
+        }
+        
+        .pagination-item {
+            transition: all 0.2s ease;
+        }
+        
+        .pagination-item:hover:not(.active) {
+            background-color: #F3F4F6;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navbar -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="landing.html" class="flex items-center">
+                        <span class="text-2xl font-bold text-primary">EduTeach</span>
+                    </a>
+                    <nav class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="landing.html" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Bosh sahifa</a>
+                        <a href="all-courses.html" class="text-primary border-b-2 border-primary px-3 py-2 text-sm font-medium">Kurslar</a>
+                        <div class="relative" id="categories-dropdown">
+                            <button class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium flex items-center gap-1">
+                                Kategoriyalar
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="dropdown absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 p-2 z-50" id="categories-menu">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="all">Barcha kurslar</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="mathematics">Matematika</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="programming">Dasturlash</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="languages">Chet tillari</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="science">Tabiiy fanlar</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="art">San'at va dizayn</a>
+                            </div>
+                        </div>
+                        <a href="landing.html#about" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Biz haqimizda</a>
+                        <a href="landing.html#contact" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Aloqa</a>
+                    </nav>
+                </div>
+                <div class="hidden md:flex md:items-center md:space-x-4">
+                    <div id="logged-out-buttons">
+                        <a href="login.html" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Kirish</a>
+                        <a href="register.html" class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">Ro'yxatdan o'tish</a>
+                    </div>
+                    <div id="logged-in-buttons" class="hidden">
+                        <div class="relative" id="user-dropdown">
+                            <button class="flex items-center text-sm font-medium text-gray-900 hover:text-primary">
+                                <img src="https://via.placeholder.com/32" alt="User" class="h-8 w-8 rounded-full mr-2">
+                                <span>Aziza Karimova</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="dropdown absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 z-50" id="user-menu">
+                                <a href="index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sozlamalar</a>
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" id="logout-button">Chiqish</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex md:hidden">
+                    <button id="mobile-menu-button" class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="mobile-menu fixed inset-0 bg-gray-800 bg-opacity-75 z-50 md:hidden" id="mobile-menu">
+            <div class="absolute top-0 left-0 w-3/4 max-w-xs h-full bg-white shadow-xl p-4">
+                <div class="flex items-center justify-between mb-6">
+                    <a href="landing.html" class="flex items-center">
+                        <span class="text-xl font-bold text-primary">EduTeach</span>
+                    </a>
+                    <button id="close-mobile-menu" class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <nav class="flex flex-col space-y-2">
+                    <a href="landing.html" class="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Bosh sahifa</a>
+                    <a href="all-courses.html" class="text-primary bg-primary-light px-3 py-2 rounded-md text-sm font-medium">Kurslar</a>
+                    <div class="relative">
+                        <button class="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium flex items-center justify-between w-full" id="mobile-categories-button">
+                            <span>Kategoriyalar</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div class="hidden pl-4 mt-1 space-y-1" id="mobile-categories-menu">
+                            <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="all">Barcha kurslar</a>
+                            <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="mathematics">Matematika</a>
+                            <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="programming">Dasturlash</a>
+                            <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="languages">Chet tillari</a>
+                            <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="science">Tabiiy fanlar</a>
+                            <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" data-category="art">San'at va dizayn</a>
+                        </div>
+                    </div>
+                    <a href="landing.html#about" class="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Biz haqimizda</a>
+                    <a href="landing.html#contact" class="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Aloqa</a>
+                </nav>
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <div id="mobile-logged-out-buttons">
+                        <a href="login.html" class="block w-full text-center px-4 py-2 text-sm font-medium text-primary hover:bg-gray-100 rounded-md mb-2">Kirish</a>
+                        <a href="register.html" class="block w-full text-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover">Ro'yxatdan o'tish</a>
+                    </div>
+                    <div id="mobile-logged-in-buttons" class="hidden">
+                        <div class="flex items-center px-3 py-2 mb-4">
+                            <img src="https://via.placeholder.com/32" alt="User" class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-sm font-medium text-gray-900">Aziza Karimova</span>
+                        </div>
+                        <a href="index.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Dashboard</a>
+                        <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Profil</a>
+                        <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Sozlamalar</a>
+                        <div class="border-t border-gray-200 my-2"></div>
+                        <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" id="mobile-logout-button">Chiqish</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <h1 class="text-3xl font-bold text-gray-900">Barcha kurslar</h1>
+            <p class="mt-2 text-lg text-gray-600">O'zingizga mos kurslarni toping va o'rganishni boshlang</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Filters -->
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex flex-wrap gap-2">
+                    <button class="category-pill px-4 py-2 bg-primary text-white font-medium rounded-full" data-category="all">
+                        Barchasi
+                    </button>
+                    <button class="category-pill px-4 py-2 bg-primary-light text-primary font-medium rounded-full" data-category="mathematics">
+                        Matematika
+                    </button>
+                    <button class="category-pill px-4 py-2 bg-secondary-light text-secondary font-medium rounded-full" data-category="programming">
+                        Dasturlash
+                    </button>
+                    <button class="category-pill px-4 py-2 bg-accent-light text-accent font-medium rounded-full" data-category="languages">
+                        Chet tillari
+                    </button>
+                    <button class="category-pill px-4 py-2 bg-pastel-purple text-purple-600 font-medium rounded-full" data-category="science">
+                        Tabiiy fanlar
+                    </button>
+                    <button class="category-pill px-4 py-2 bg-pastel-pink text-pink-600 font-medium rounded-full" data-category="art">
+                        San'at va dizayn
+                    </button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label for="sort-by" class="text-sm font-medium text-gray-700">Saralash:</label>
+                    <select id="sort-by" class="rounded-md border-gray-300 py-2 pl-3 pr-10 text-sm focus:border-primary focus:outline-none focus:ring-primary">
+                        <option value="popular">Mashhur</option>
+                        <option value="newest">Yangi</option>
+                        <option value="price-low">Narx: pastdan yuqoriga</option>
+                        <option value="price-high">Narx: yuqoridan pastga</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="mb-8">
+            <div class="relative">
+                <input type="text" id="search-input" placeholder="Kurslarni qidirish..." class="w-full rounded-md border-gray-300 py-3 pl-10 pr-4 focus:border-primary focus:outline-none focus:ring-primary">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Courses Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="courses-grid">
+            <!-- Course Card 1 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover" data-category="mathematics">
+                <div class="relative">
+                    <img src="https://via.placeholder.com/600x400" alt="Algebra asoslari" class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4">
+                        <span class="px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">Matematika</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Algebra asoslari</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-2">Algebraning asosiy tushunchalari va formulalarini o'rganing. Ushbu kurs orqali algebraik masalalarni yechish ko'nikmalarini rivojlantirasiz.</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <div class="flex items-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span>24 dars</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>245 o'quvchi</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://via.placeholder.com/40" alt="Teacher" class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-sm font-medium">Aziza Karimova</span>
+                        </div>
+                        <span class="font-bold text-primary">Bepul</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 2 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover" data-category="programming">
+                <div class="relative">
+                    <img src="https://via.placeholder.com/600x400" alt="Web dasturlash" class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4">
+                        <span class="px-3 py-1 bg-secondary text-white text-xs font-semibold rounded-full">Dasturlash</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Web dasturlash asoslari</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-2">HTML, CSS va JavaScript asoslarini o'rganing va o'z web-saytingizni yarating. Zamonaviy web-texnologiyalar bilan tanishing.</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <div class="flex items-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span>36 dars</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>378 o'quvchi</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://via.placeholder.com/40" alt="Teacher" class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-sm font-medium">Jasur Toshmatov</span>
+                        </div>
+                        <span class="font-bold text-primary">299,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 3 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover" data-category="languages">
+                <div class="relative">
+                    <img src="https://via.placeholder.com/600x400" alt="Ingliz tili" class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4">
+                        <span class="px-3 py-1 bg-accent text-white text-xs font-semibold rounded-full">Chet tillari</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Ingliz tili: Boshlang'ich daraja</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-2">Ingliz tilini noldan o'rganing. Kundalik muloqot uchun kerak bo'ladigan so'z va iboralarni o'zlashtiring.</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <div class="flex items-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span>30 dars</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linec  viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>412 o'quvchi</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://via.placeholder.com/40" alt="Teacher" class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-sm font-medium">Malika Nurmatova</span>
+                        </div>
+                        <span class="font-bold text-primary">199,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 4 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover" data-category="science">
+                <div class="relative">
+                    <img src="https://via.placeholder.com/600x400" alt="Fizika" class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4">
+                        <span class="px-3 py-1 bg-purple-600 text-white text-xs font-semibold rounded-full">Tabiiy fanlar</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Fizika asoslari</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-2">Fizikaning asosiy qonunlari va tushunchalarini o'rganing. Mexanika, elektr va magnit hodisalari bilan tanishing.</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <div class="flex items-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span>28 dars</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>198 o'quvchi</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://via.placeholder.com/40" alt="Teacher" class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-sm font-medium">Rustam Ismoilov</span>
+                        </div>
+                        <span class="font-bold text-primary">249,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 5 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover" data-category="art">
+                <div class="relative">
+                    <img src="https://via.placeholder.com/600x400" alt="Grafik dizayn" class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4">
+                        <span class="px-3 py-1 bg-pink-600 text-white text-xs font-semibold rounded-full">San'at va dizayn</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Grafik dizayn asoslari</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-2">Grafik dizayn asoslarini o'rganing va o'z loyihalaringizni yarating. Adobe Photoshop va Illustrator dasturlari bilan ishlashni o'rganing.</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <div class="flex items-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span>32 dars</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>256 o'quvchi</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://via.placeholder.com/40" alt="Teacher" class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-sm font-medium">Sabina Aliyeva</span>
+                        </div>
+                        <span class="font-bold text-primary">349,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 6 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover" data-category="programming">
+                <div class="relative">
+                    <img src="https://via.placeholder.com/600x400" alt="Python dasturlash" class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4">
+                        <span class="px-3 py-1 bg-secondary text-white text-xs font-semibold rounded-full">Dasturlash</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Python dasturlash tili</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-2">Python dasturlash tilini noldan o'rganing. Ma'lumotlar tahlili, sun'iy intellekt va web-dasturlash uchun Python.</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <div class="flex items-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span>40 dars</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>325 o'quvchi</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://via.placeholder.com/40" alt="Teacher" class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-sm font-medium">Jasur Toshmatov</span>
+                        </div>
+                        <span class="font-bold text-primary">399,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 7 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover" data-category="mathematics">
+                <div class="relative">
+                    <img src="https://via.placeholder.com/600x400" alt="Geometriya" class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4">
+                        <span class="px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">Matematika</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Geometriya asoslari</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-2">Geometriyaning asosiy tushunchalari va teoremalarini o'rganing. Fazoviy tasavvurni rivojlantiring.</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <div class="flex items-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span>22 dars</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>185 o'quvchi</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://via.placeholder.com/40" alt="Teacher" class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-sm font-medium">Aziza Karimova</span>
+                        </div>
+                        <span class="font-bold text-primary">149,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 8 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover" data-category="languages">
+                <div class="relative">
+                    <img src="https://via.placeholder.com/600x400" alt="Koreys tili" class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4">
+                        <span class="px-3 py-1 bg-accent text-white text-xs font-semibold rounded-full">Chet tillari</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Koreys tili: Boshlang'ich daraja</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-2">Koreys tilini noldan o'rganing. Hangul alifbosi, asosiy so'z va iboralar, oddiy muloqot.</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <div class="flex items-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span>26 dars</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>156 o'quvchi</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://via.placeholder.com/40" alt="Teacher" class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-sm font-medium">Dilnoza Qodirova</span>
+                        </div>
+                        <span class="font-bold text-primary">249,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 9 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover" data-category="science">
+                <div class="relative">
+                    <img src="https://via.placeholder.com/600x400" alt="Kimyo" class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4">
+                        <span class="px-3 py-1 bg-purple-600 text-white text-xs font-semibold rounded-full">Tabiiy fanlar</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Organik kimyo asoslari</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-2">Organik kimyoning asosiy tushunchalari va qonuniyatlarini o'rganing. Organik birikmalar va ularning xossalari.</p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <div class="flex items-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            <span>30 dars</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <span>142 o'quvchi</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://via.placeholder.com/40" alt="Teacher" class="h-8 w-8 rounded-full mr-2">
+                            <span class="text-sm font-medium">Nodira Saidova</span>
+                        </div>
+                        <span class="font-bold text-primary">199,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results Message (hidden by default) -->
+        <div id="no-results" class="hidden py-12 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="mt-4 text-lg font-medium text-gray-900">Kurslar topilmadi</h3>
+            <p class="mt-2 text-gray-600">Boshqa kalit so'zlar bilan qidirib ko'ring yoki filtrlash parametrlarini o'zgartiring.</p>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-12 flex justify-center">
+            <nav class="flex items-center space-x-2" aria-label="Pagination">
+                <a href="#" class="pagination-item relative inline-flex items-center px-2 py-2 rounded-md text-gray-400 hover:text-gray-700">
+                    <span class="sr-only">Oldingi</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+                <a href="#" class="pagination-item relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-primary text-white">
+                    1
+                </a>
+                <a href="#" class="pagination-item relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700">
+                    2
+                </a>
+                <a href="#" class="pagination-item relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700">
+                    3
+                </a>
+                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700">
+                    ...
+                </span>
+                <a href="#" class="pagination-item relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700">
+                    8
+                </a>
+                <a href="#" class="pagination-item relative inline-flex items-center px-2 py-2 rounded-md text-gray-400 hover:text-gray-700">
+                    <span class="sr-only">Keyingi</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-1">
+                    <a href="landing.html" class="flex items-center mb-4">
+                        <span class="text-2xl font-bold text-white">EduTeach</span>
+                    </a>
+                    <p class="text-gray-400 mb-4">Zamonaviy ta'lim platformasi. Istalgan joyda, istalgan vaqtda o'qish imkoniyati.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4
