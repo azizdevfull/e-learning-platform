@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Test;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
@@ -68,5 +69,31 @@ class StudentController extends Controller
         $lesson = $course->lessons()->findOrFail($lessonId);
 
         return view('student.lesson', compact('course', 'lesson'));
+    }
+    public function profile()
+    {
+        $student = Auth::user();
+
+        return view('student.profile', compact('student'));
+    }
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+
+        $student = Auth::user();
+        $student->name = $request->name;
+        $student->email = $request->email;
+
+        if ($request->filled('password')) {
+            $student->password = bcrypt($request->password);
+        }
+
+        $student->save();
+
+        return redirect()->back()->with('success', 'Profil muvaffaqiyatli yangilandi!');
     }
 }

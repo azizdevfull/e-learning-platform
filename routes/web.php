@@ -81,7 +81,8 @@ Route::middleware(['auth'])->group(function () {
             // Testlar
             Route::get('/tests', [StudentTestController::class, 'index'])->name('tests.index');
             // Route::get('/tests/{test}/result', [StudentTestController::class, 'result'])->name('tests.result');
-
+            Route::get('/profile', [StudentController::class, 'profile'])->name('profile');
+            Route::post('/profile', [StudentController::class, 'updateProfile'])->name('profile.update');
         });
     });
 });

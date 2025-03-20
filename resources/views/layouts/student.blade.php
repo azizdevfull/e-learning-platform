@@ -73,7 +73,7 @@
                             d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
-                <a href="index.html" class="flex items-center">
+                <a href="{{ route('student.dashboard') }}" class="flex items-center">
                     <span class="text-xl font-bold text-primary">EduPortal</span>
                 </a>
             </div>
@@ -83,7 +83,7 @@
                 <a href="{{ route('student.courses.index') }}"
                     class="px-3 py-2 rounded-md hover:bg-gray-100">Kurslar</a>
                 <a href="{{ route('student.tests.index') }}" class="px-3 py-2 rounded-md hover:bg-gray-100">Testlar</a>
-                <a href="profile.html" class="px-3 py-2 rounded-md hover:bg-gray-100">Profil</a>
+                <a href="{{ route('student.profile') }}" class="px-3 py-2 rounded-md hover:bg-gray-100">Profil</a>
             </div>
 
             <div class="flex items-center space-x-2">
@@ -93,7 +93,7 @@
                     </button>
                     <div id="profile-dropdown"
                         class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                        <a href="profile.html"
+                        <a href="{{ route('student.profile') }}"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
                         <div class="border-t border-gray-100"></div>
                         <form action="{{ route('logout') }}" method="POST">
@@ -200,7 +200,7 @@
                         </svg>
                         <span>Forum</span>
                     </a>
-                    <a href="#"
+                    <a href="{{ route('student.profile') }}"
                         class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-hover text-gray-600 hover:text-gray-900">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
