@@ -21,8 +21,8 @@
                     @foreach ($courses as $course)
                         <!-- Course Card 1 -->
                         <div class="rounded-lg border bg-white shadow-sm overflow-hidden">
-                            <img src="{{ asset('storage/' . $course->image) }}" alt="Web dasturlash asoslari"
-                                class="h-48 w-full object-cover">
+                            <img src="{{ $course->image ? asset('storage/' . $course->image) : asset('images/default-course.png') }}"
+                                alt="Web dasturlash asoslari" class="h-48 w-full object-cover">
                             <div class="p-4">
                                 <div class="flex items-center justify-between">
                                     <span

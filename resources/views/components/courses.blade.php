@@ -11,7 +11,7 @@
             <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover"
                 data-category="{{ $course->category->name }}">
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80"
+                    <img src="{{ $course->image ? asset('storage/' . $course->image) : asset('images/default-course.png') }}"
                         alt="{{ $course->title }}" class="w-full h-48 object-cover">
                     <div class="absolute top-4 left-4">
                         <span

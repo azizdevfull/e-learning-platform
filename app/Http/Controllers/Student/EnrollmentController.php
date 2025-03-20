@@ -47,6 +47,6 @@ class EnrollmentController extends Controller
             'course_id' => $courseId,
         ]);
 
-        return redirect()->route('student.dashboard')->with('message', 'Kursga muvaffaqiyatli yozildingiz!');
+        return redirect()->route('student.courses.index')->with('message', 'Kursga muvaffaqiyatli yozildingiz!');
     }
 }

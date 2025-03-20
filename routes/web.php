@@ -103,6 +103,7 @@ Route::middleware(['auth'])->group(function () {
 
             // Kurslar ro'yxati
             Route::get('/courses', [StudentCourseController::class, 'index'])->name('courses.index');
+            Route::get('/all-courses', [StudentCourseController::class, 'allCourses'])->name('all.courses');
 
             // Bitta kursni ko‘rish
             Route::get('/courses/{course}', [StudentCourseController::class, 'show'])->name('courses.show');

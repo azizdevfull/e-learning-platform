@@ -16,7 +16,18 @@ class StudentCourseController extends Controller
         $courses = Auth::user()->courses()->with('category')->paginate(10);
         return view('student.courses.index', compact('courses'));
     }
+    public function allCourses()
+    {
+        // Talabaning enroll qilgan kurslarining ID’larini olish
+        $enrolledCourseIds = Auth::user()->courses()->pluck('courses.id')->toArray();
 
+        // Barcha kurslardan enroll qilinganlarni chiqarib tashlash
+        $courses = Course::with('category')
+            ->whereNotIn('id', $enrolledCourseIds)
+            ->paginate(10);
+
+        return view('student.all-courses.index', compact('courses'));
+    }
     // Kurs detallari
     public function show(Course $course)
     {
