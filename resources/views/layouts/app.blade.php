@@ -131,10 +131,13 @@
                         <span class="text-2xl font-bold text-primary">EduTeach</span>
                     </a>
                     <nav class="hidden md:ml-10 md:flex md:space-x-8">
-                        <a href="/" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Bosh
+                        <a href="{{ route('home') }}"
+                            class="px-3 py-2 text-sm font-medium text-gray-900 hover:text-primary 
+                        {{ request()->routeIs('home') ? 'text-primary' : '' }}">Bosh
                             sahifa</a>
                         <a href="#courses"
-                            class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Kurslar</a>
+                            class="px-3 py-2 text-sm font-medium text-gray-900 hover:text-primary 
+                        {{ request()->routeIs('courses.index') ? 'text-primary' : '' }}">Kurslar</a>
                         <div class="relative" id="categories-dropdown">
                             <button
                                 class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium flex items-center gap-1">
@@ -149,10 +152,12 @@
                                 <x-categories.navbar />
                             </div>
                         </div>
-                        <a href="#about" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Biz
-                            haqimizda</a>
-                        <a href="#contact"
-                            class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Aloqa</a>
+                        @if (!request()->routeIs('courses.*'))
+                            <a href="#about" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Biz
+                                haqimizda</a>
+                            <a href="#contact"
+                                class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium">Aloqa</a>
+                        @endif
                     </nav>
                 </div>
                 <div class="hidden md:flex md:items-center md:space-x-4">
@@ -306,7 +311,10 @@
                     <h3 class="text-lg font-semibold mb-4">Tezkor havolalar</h3>
                     <ul class="space-y-2">
                         <li><a href="/" class="text-gray-400 hover:text-white">Bosh sahifa</a></li>
-                        <li><a href="#courses" class="text-gray-400 hover:text-white">Kurslar</a></li>
+                        <li
+                            class="{{ request()->routeIs('courses.index') ? 'bg-primary-dark text-white' : 'text-gray-400 hover:text-white' }}">
+                            <a href="#courses">Kurslar</a>
+                        </li>
                         <li><a href="#about" class="text-gray-400 hover:text-white">Biz haqimizda</a></li>
                         <li><a href="#contact" class="text-gray-400 hover:text-white">Aloqa</a></li>
                         <li><a href="{{ route('login') }}" class="text-gray-400 hover:text-white">Kirish</a></li>
@@ -515,7 +523,7 @@
             });
         });
     </script>
-  
+
 </body>
 
 </html>

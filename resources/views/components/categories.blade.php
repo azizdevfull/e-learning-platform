@@ -6,8 +6,7 @@
     </div>
     <div class="flex flex-wrap justify-center gap-4">
         @foreach ($categories as $category)
-
-            <a href="#"
+            <a href="{{ route('courses.index', ['category' => $category->name]) }}"
                 class="category-pill px-6 py-3 bg-primary-light text-primary font-medium rounded-full hover:bg-primary hover:text-white"
                 data-category="{{ $category->name }}">{{ $category->name }}</a>
         @endforeach
