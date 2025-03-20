@@ -234,9 +234,9 @@
                         </button>
                         <div class="hidden pl-4 mt-1 space-y-1" id="mobile-categories-menu">
                             @foreach ($categories as $category)
-                                <a href="#{{ $category->slug }}"
+                                <a href="#{{ $category->name }}"
                                     class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
-                                    data-category="{{ $category->slug }}">{{ $category->name }}</a>
+                                    data-category="{{ $category->name }}">{{ $category->name }}</a>
                             @endforeach
                         </div>
                     </div>
@@ -317,10 +317,7 @@
                 <div class="md:col-span-1">
                     <h3 class="text-lg font-semibold mb-4">Kategoriyalar</h3>
                     <ul class="space-y-2">
-                        @foreach ($categories as $category)
-                            <li><a href="#{{ $category->slug }}"
-                                    class="text-gray-400 hover:text-white">{{ $category->name }}</a></li>
-                        @endforeach
+                        <x-categories.footer />
                     </ul>
                 </div>
                 <div class="md:col-span-1">
