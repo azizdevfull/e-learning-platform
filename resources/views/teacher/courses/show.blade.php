@@ -60,8 +60,8 @@
                         </div>
                         <div class="md:col-span-2">
                             <h3 class="text-lg font-semibold text-gray-900">Rasmi</h3>
-                            <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}"
-                                class="h-40  object-cover rounded-lg">
+                            <img src="{{ $course->image ? asset('storage/' . $course->image) : asset('images/default-course.png') }}"
+                                alt="{{ $course->title }}" class="h-40  object-cover rounded-lg">
                         </div>
                     </div>
                     <div class="mt-6">
