@@ -22,9 +22,6 @@ use App\Http\Controllers\Student\TestSubmissionController;
 use App\Http\Controllers\Teacher\CourseStatisticsController;
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 

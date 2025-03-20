@@ -2,13 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Course;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        return view('welcome');
+        $studentRole = Role::where("name", "student")->first();
+        $teacherRole = Role::where("name", "teacher")->first();
+        // dd($studentRole);
+        $categories = Category::all();
+        $courses = Course::with('category', 'lessons', 'students', 'teacher')->get();
+        $students_count = User::where('role_id', $studentRole->id)->count();
+        $teachers_count = User::where('role_id', $studentRole->id)->count();
+
+        return view('welcome', compact('categories', 'courses', 'students_count', 'teachers_count'));
     }
 
     public function dashboard()
