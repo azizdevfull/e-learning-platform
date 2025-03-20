@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -47,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('students', AdminStudentController::class);
         Route::resource('courses', AdminCourseController::class);
         Route::delete('/courses/{course}/students/{student}', [AdminCourseController::class, 'removeStudent'])->name('courses.remove-student');
-
+        Route::resource('testimonials', TestimonialController::class);
         // testlar
         Route::resource('tests', AdminTestController::class);
         // Route::resource('tests.questions', QuestionController::class);

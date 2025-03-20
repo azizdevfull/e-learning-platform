@@ -224,6 +224,15 @@
                         </svg>
                         <span>Adminlar</span>
                     </a>
+                    <a href="{{ route('admin.testimonials.index') }}"
+                        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {{ request()->routeIs('admin.testimonials.*') ? 'bg-primary text-white' : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900' }}">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8h2a2 2 0 012 2v8a2 2 0 01-2 2h-2m-8-4h.01M9 16h.01M12 8h.01M21 12c0 3.866-3.582 7-8 7s-8-3.134-8-7 3.582-7 8-7 8 3.134 8 7z" />
+                        </svg>
+                        <span>Testimoniallar</span>
+                    </a>
+
                 </nav>
             </div>
             <div class="p-4 border-t">
