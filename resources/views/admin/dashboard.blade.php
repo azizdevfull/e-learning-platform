@@ -89,8 +89,16 @@
                 @else
                     <ul class="space-y-3">
                         @foreach ($recent_activities as $activity)
+                            {{-- @dd($activity->cause) --}}
                             <li class="text-sm text-gray-600">
-                                {{ $activity->description }}: <span class="font-medium">{{ $activity->subject }}</span>
+                                <span class="font-medium">{{ $activity->causer?->name ?? 'Noma’lum foydalanuvchi' }}</span>
+                                {{ $activity->description }}
+                                @if ($activity->subject)
+                                    <span class="font-medium">
+                                        ({{ class_basename($activity->subject_type) }}:
+                                        {{ $activity->subject->title ?? ($activity->subject->name ?? $activity->subject_id) }})
+                                    </span>
+                                @endif
                                 <span class="text-xs text-gray-400">({{ $activity->created_at->diffForHumans() }})</span>
                             </li>
                         @endforeach
