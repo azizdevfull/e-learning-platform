@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Teacher\TestController;
@@ -39,10 +40,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('home');
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/courses', [AdminController::class, 'courses'])->name('courses.index');
-        Route::get('/users', [AdminController::class, 'users'])->name('users.index');
-        Route::get('/tests', [AdminController::class, 'tests'])->name('tests.index');
-        Route::get('/profile', [AdminController::class, 'tests'])->name('profile');
+        Route::get('/profile', [UserController::class, 'tests'])->name('profile');
+        Route::resource('users', UserController::class);
         Route::resource('categories', AdminCategoryController::class);
         Route::resource('teachers', AdminTeacherController::class);
         Route::resource('students', AdminStudentController::class);
