@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     {
         // O'qituvchi
         User::create([
-            'name' => 'Teacher One',
+            'name' => 'Azamjon Kamolov',
             'email' => 'teacher1@example.com',
             'password' => Hash::make('password'),
             'role_id' => Role::where('name', 'teacher')->first()->id,
@@ -25,14 +25,14 @@ class UserSeeder extends Seeder
 
         // Talabalar
         User::create([
-            'name' => 'Student One',
+            'name' => 'Shoxista Raximova',
             'email' => 'student1@example.com',
             'password' => Hash::make('password'),
             'role_id' => Role::where('name', 'student')->first()->id,
         ]);
 
         User::create([
-            'name' => 'Student Two',
+            'name' => 'Kamola Azizova',
             'email' => 'student2@example.com',
             'password' => Hash::make('password'),
             'role_id' => Role::where('name', 'student')->first()->id,
