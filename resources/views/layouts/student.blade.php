@@ -89,7 +89,8 @@
             <div class="flex items-center space-x-2">
                 <div class="relative">
                     <button id="profile-menu-btn" class="p-1 rounded-full hover:bg-gray-100">
-                        <img src="{{ asset('images/default-profile.png') }}" alt="Profile" class="h-8 w-8 rounded-full">
+                        <img src="{{ asset('images/default-profile.png') }}" alt="Profile"
+                            class="h-8 w-8 rounded-full">
                     </button>
                     <div id="profile-dropdown"
                         class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
@@ -209,7 +210,7 @@
                         </svg>
                         <span>Profil</span>
                     </a>
-                    
+
                 </div>
             </div>
         </div>

@@ -27,6 +27,7 @@ use App\Http\Controllers\Student\TestSubmissionController;
 use App\Http\Controllers\Teacher\CourseStatisticsController;
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
+use App\Http\Controllers\Admin\TestController as AdminTestController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -47,6 +48,17 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('students', AdminStudentController::class);
         Route::resource('courses', AdminCourseController::class);
         Route::delete('/courses/{course}/students/{student}', [AdminCourseController::class, 'removeStudent'])->name('courses.remove-student');
+
+        // testlar
+        Route::resource('tests', AdminTestController::class);
+        // Route::resource('tests.questions', QuestionController::class);
+
+        // Savollar uchun route’lar
+        Route::get('/tests/{test}/questions/create', [AdminTestController::class, 'createQuestion'])->name('tests.questions.create');
+        Route::post('/tests/{test}/questions', [AdminTestController::class, 'storeQuestion'])->name('tests.questions.store');
+        Route::get('/tests/{test}/questions/{question}/edit', [AdminTestController::class, 'editQuestion'])->name('tests.questions.edit');
+        Route::put('/tests/{test}/questions/{question}', [AdminTestController::class, 'updateQuestion'])->name('tests.questions.update');
+        Route::delete('/tests/{test}/questions/{question}', [AdminTestController::class, 'destroyQuestion'])->name('tests.questions.destroy');
     });
 
     Route::middleware('role:teacher')->group(function () {
