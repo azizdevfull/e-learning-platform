@@ -167,7 +167,7 @@
                     <p class="text-indigo-100 mb-8">EduTeach platformasiga qo'shiling va o'z bilimlaringizni
                         oshiring. Ro'yxatdan o'tish bepul va bir necha daqiqa vaqtingizni oladi.</p>
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="register.html"
+                        <a href="{{ route('register') }}"
                             class="inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-base font-medium text-primary hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-white">
                             Ro'yxatdan o'tish
                         </a>
