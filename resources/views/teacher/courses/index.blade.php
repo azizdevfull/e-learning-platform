@@ -48,8 +48,8 @@
                                     <td class="px-4 py-3 font-medium">{{ $course->title }}</td>
                                     <td class="px-4 py-3 text-sm text-gray-500">{{ $course->category->name }}</td>
                                     <td class="px-4 py-3">
-                                        <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}"
-                                            class="h-10 w-10 object-cover rounded-full">
+                                        <img src="{{ $course->image ? asset('storage/' . $course->image) : asset('images/default-course.png') }}"
+                                            alt="{{ $course->title }}" class="h-10 w-10 object-cover rounded-full">
                                     </td>
                                     <td class="px-4 py-3 text-right flex justify-end gap-2">
                                         <a href="{{ route('teacher.courses.show', $course->id) }}"

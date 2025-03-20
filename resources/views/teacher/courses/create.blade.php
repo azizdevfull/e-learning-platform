@@ -69,10 +69,9 @@
                                 @enderror
                             </div>
                             <div>
-                                <label for="image" class="block text-sm font-medium text-gray-700">Tavsif</label>
+                                <label for="image" class="block text-sm font-medium text-gray-700">Rasm</label>
                                 <input type="file" id="image" name="image"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary sm:text-sm @error('image') border-red-500 @enderror"
-                                    required>
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary sm:text-sm @error('image') border-red-500 @enderror">
                                 @error('image')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror

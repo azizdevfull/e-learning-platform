@@ -40,12 +40,16 @@ class CourseController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
+        if ($request->hasFile('image')) {
+            $path = $this->uploadFile($request->file('image'), 'courses');
+        }
+
         Course::create([
             'title' => $request->title,
             'description' => $request->description,
             'category_id' => $request->category_id,
             'teacher_id' => Auth::id(),
-            'image' => $this->uploadFile($request->file('image'), 'courses')
+            'image' => $path ?? null
         ]);
 
         return redirect()->route('teacher.courses.index')->with('success', 'Course muvaffaqiyatli yaratildi!');
