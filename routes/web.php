@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Teacher\TestController;
@@ -52,6 +54,8 @@ Route::middleware(['auth'])->group(function () {
         // testlar
         Route::resource('tests', AdminTestController::class);
         // Route::resource('tests.questions', QuestionController::class);
+
+        Route::resource('contacts', AdminContactController::class);
 
         // Savollar uchun route’lar
         Route::get('/tests/{test}/questions/create', [AdminTestController::class, 'createQuestion'])->name('tests.questions.create');
@@ -129,7 +133,7 @@ Route::middleware(['auth'])->group(function () {
 // xamma kurslar ro'yxati qoshilish uchun
 Route::get('/courses', [EnrollmentController::class, 'index'])->name('courses.index');
 Route::get('/courses/{course}', [EnrollmentController::class, 'show'])->name('courses.show');
-
+Route::post('/contacts', [ContactController::class, 'store'])->name('contact.store');
 
 Route::prefix('courses/{course}/tests')->group(function () {
     Route::get('/', [TestController::class, 'index'])->name('courses.tests.index');
