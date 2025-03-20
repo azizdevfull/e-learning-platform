@@ -15,32 +15,19 @@
         <div class="mb-8">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div class="flex flex-wrap gap-2">
-                    <button class="category-pill px-4 py-2 bg-primary text-white font-medium rounded-full"
-                        data-category="all">
+                    <a href="{{ route('courses.index') }}"
+                        class=" px-4 py-2 font-medium rounded-full 
+                        {{ request('category') ? 'bg-gray-200 text-gray-800' : 'bg-primary text-white' }}">
                         Barchasi
-                    </button>
-                    <button class="category-pill px-4 py-2 bg-primary-light text-primary font-medium rounded-full"
-                        data-category="mathematics">
-                        Matematika
-                    </button>
-                    <button class="category-pill px-4 py-2 bg-secondary-light text-secondary font-medium rounded-full"
-                        data-category="programming">
-                        Dasturlash
-                    </button>
-                    <button class="category-pill px-4 py-2 bg-accent-light text-accent font-medium rounded-full"
-                        data-category="languages">
-                        Chet tillari
-                    </button>
-                    <button class="category-pill px-4 py-2 bg-pastel-purple text-purple-600 font-medium rounded-full"
-                        data-category="science">
-                        Tabiiy fanlar
-                    </button>
-                    <button class="category-pill px-4 py-2 bg-pastel-pink text-pink-600 font-medium rounded-full"
-                        data-category="art">
-                        San'at va dizayn
-                    </button>
+                    </a>
+                    @foreach ($categories as $category)
+                        <a href="{{ route('courses.index', ['category' => $category->name]) }}"
+                            class=" px-4 py-2 font-medium rounded-full 
+                            {{ request('category') === $category->name ? 'bg-primary text-white' : 'bg-gray-200 text-gray-800' }}">
+                            {{ $category->name }}
+                        </a>
+                    @endforeach
                 </div>
-
             </div>
         </div>
 
@@ -122,44 +109,66 @@
         </div>
 
         <!-- Pagination -->
-        <div class="mt-12 flex justify-center">
-            <nav class="flex items-center space-x-2" aria-label="Pagination">
-                <a href="#"
-                    class="pagination-item relative inline-flex items-center px-2 py-2 rounded-md text-gray-400 hover:text-gray-700">
-                    <span class="sr-only">Oldingi</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </a>
-                <a href="#"
-                    class="pagination-item relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-primary text-white">
-                    1
-                </a>
-                <a href="#"
-                    class="pagination-item relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700">
-                    2
-                </a>
-                <a href="#"
-                    class="pagination-item relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700">
-                    3
-                </a>
-                <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700">
-                    ...
-                </span>
-                <a href="#"
-                    class="pagination-item relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700">
-                    8
-                </a>
-                <a href="#"
-                    class="pagination-item relative inline-flex items-center px-2 py-2 rounded-md text-gray-400 hover:text-gray-700">
-                    <span class="sr-only">Keyingi</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </a>
-            </nav>
-        </div>
+        @if ($courses->hasPages())
+            <div class="mt-12 flex justify-center">
+                <nav class="flex items-center space-x-2" aria-label="Pagination">
+                    {{-- Oldingi sahifa tugmasi --}}
+                    @if ($courses->onFirstPage())
+                        <span
+                            class="relative inline-flex items-center px-2 py-2 rounded-md text-gray-400 cursor-not-allowed">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </span>
+                    @else
+                        <a href="{{ $courses->previousPageUrl() }}"
+                            class="pagination-item relative inline-flex items-center px-2 py-2 rounded-md text-gray-400 hover:text-gray-700">
+                            <span class="sr-only">Oldingi</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </a>
+                    @endif
+
+                    {{-- Sahifalar --}}
+                    @foreach ($courses->getUrlRange(1, $courses->lastPage()) as $page => $url)
+                        @if ($page == $courses->currentPage())
+                            <span
+                                class="pagination-item relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md bg-primary text-white">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $url }}"
+                                class="pagination-item relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-200">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endforeach
+
+                    {{-- Keyingi sahifa tugmasi --}}
+                    @if ($courses->hasMorePages())
+                        <a href="{{ $courses->nextPageUrl() }}"
+                            class="pagination-item relative inline-flex items-center px-2 py-2 rounded-md text-gray-400 hover:text-gray-700">
+                            <span class="sr-only">Keyingi</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    @else
+                        <span
+                            class="relative inline-flex items-center px-2 py-2 rounded-md text-gray-400 cursor-not-allowed">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </span>
+                    @endif
+                </nav>
+            </div>
+        @endif
     </main>
 @endsection

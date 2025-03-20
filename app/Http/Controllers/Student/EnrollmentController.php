@@ -7,19 +7,30 @@ use App\Models\Category;
 use App\Models\Course;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EnrollmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::all();
+        $query = Course::with('category', 'lessons', 'teacher', 'students');
+
+        if ($request->has('category')) {
+            $query->whereHas('category', function ($q) use ($request) {
+                $q->where('name', $request->category);
+            });
+        }
+
+        $courses = $query->paginate(6);
         $categories = Category::all();
+
         return view('courses.index', compact('courses', 'categories'));
     }
 
+
     public function enroll($courseId)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         // Avval yozilganligini tekshirish
         if ($user->enrollments()->where('course_id', $courseId)->exists()) {
