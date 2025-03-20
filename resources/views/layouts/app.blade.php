@@ -343,43 +343,177 @@
 
     <!-- JavaScript -->
     <script>
-        // Dropdown va mobile menu logikasi shu yerda qoladi
+        // Categories dropdown
         const categoriesDropdown = document.getElementById('categories-dropdown');
         const categoriesMenu = document.getElementById('categories-menu');
+
         if (categoriesDropdown && categoriesMenu) {
-            categoriesDropdown.addEventListener('click', (e) => {
+            categoriesDropdown.addEventListener('click', function (e) {
                 e.stopPropagation();
                 categoriesMenu.classList.toggle('show');
             });
         }
 
+        // User dropdown
         const userDropdown = document.getElementById('user-dropdown');
         const userMenu = document.getElementById('user-menu');
+
         if (userDropdown && userMenu) {
-            userDropdown.addEventListener('click', (e) => {
+            userDropdown.addEventListener('click', function (e) {
                 e.stopPropagation();
                 userMenu.classList.toggle('show');
             });
         }
 
-        document.addEventListener('click', () => {
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function () {
             if (categoriesMenu) categoriesMenu.classList.remove('show');
             if (userMenu) userMenu.classList.remove('show');
         });
 
+        // Mobile menu
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const closeMobileMenuButton = document.getElementById('close-mobile-menu');
         const mobileMenu = document.getElementById('mobile-menu');
+
         if (mobileMenuButton && mobileMenu && closeMobileMenuButton) {
-            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.add('show'));
-            closeMobileMenuButton.addEventListener('click', () => mobileMenu.classList.remove('show'));
+            mobileMenuButton.addEventListener('click', function () {
+                mobileMenu.classList.add('show');
+            });
+
+            closeMobileMenuButton.addEventListener('click', function () {
+                mobileMenu.classList.remove('show');
+            });
         }
 
+        // Mobile categories dropdown
         const mobileCategoriesButton = document.getElementById('mobile-categories-button');
         const mobileCategoriesMenu = document.getElementById('mobile-categories-menu');
+
         if (mobileCategoriesButton && mobileCategoriesMenu) {
-            mobileCategoriesButton.addEventListener('click', () => mobileCategoriesMenu.classList.toggle('hidden'));
+            mobileCategoriesButton.addEventListener('click', function () {
+                mobileCategoriesMenu.classList.toggle('hidden');
+            });
         }
+
+        // Login/Logout functionality (for demo purposes)
+        const logoutButton = document.getElementById('logout-button');
+        const mobileLogoutButton = document.getElementById('mobile-logout-button');
+        const loggedOutButtons = document.getElementById('logged-out-buttons');
+        const loggedInButtons = document.getElementById('logged-in-buttons');
+        const mobileLoggedOutButtons = document.getElementById('mobile-logged-out-buttons');
+        const mobileLoggedInButtons = document.getElementById('mobile-logged-in-buttons');
+
+        // Check if user is logged in (demo)
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+            if (loggedOutButtons && loggedInButtons) {
+                if (isLoggedIn) {
+                    loggedOutButtons.classList.add('hidden');
+                    loggedInButtons.classList.remove('hidden');
+                } else {
+                    loggedOutButtons.classList.remove('hidden');
+                    loggedInButtons.classList.add('hidden');
+                }
+            }
+
+            if (mobileLoggedOutButtons && mobileLoggedInButtons) {
+                if (isLoggedIn) {
+                    mobileLoggedOutButtons.classList.add('hidden');
+                    mobileLoggedInButtons.classList.remove('hidden');
+                } else {
+                    mobileLoggedOutButtons.classList.remove('hidden');
+                    mobileLoggedInButtons.classList.add('hidden');
+                }
+            }
+        }
+
+        // Run on page load
+        checkLoginStatus();
+
+        // Logout functionality
+        if (logoutButton) {
+            logoutButton.addEventListener('click', function (e) {
+                e.preventDefault();
+                localStorage.setItem('isLoggedIn', 'false');
+                checkLoginStatus();
+            });
+        }
+
+        if (mobileLogoutButton) {
+            mobileLogoutButton.addEventListener('click', function (e) {
+                e.preventDefault();
+                localStorage.setItem('isLoggedIn', 'false');
+                checkLoginStatus();
+                mobileMenu.classList.remove('show');
+            });
+        }
+
+        // Category filtering
+        const categoryPills = document.querySelectorAll('.category-pill');
+        const courseCards = document.querySelectorAll('[data-category]');
+
+        categoryPills.forEach(pill => {
+            pill.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const category = this.getAttribute('data-category');
+
+                // Remove active class from all pills
+                categoryPills.forEach(p => p.classList.remove('bg-primary', 'text-white'));
+                categoryPills.forEach(p => {
+                    if (p.getAttribute('data-category') === 'mathematics') {
+                        p.classList.add('bg-primary-light', 'text-primary');
+                    } else if (p.getAttribute('data-category') === 'programming') {
+                        p.classList.add('bg-secondary-light', 'text-secondary');
+                    } else if (p.getAttribute('data-category') === 'languages') {
+                        p.classList.add('bg-accent-light', 'text-accent');
+                    } else if (p.getAttribute('data-category') === 'science') {
+                        p.classList.add('bg-pastel-purple', 'text-purple-600');
+                    } else if (p.getAttribute('data-category') === 'art') {
+                        p.classList.add('bg-pastel-pink', 'text-pink-600');
+                    }
+                });
+
+                // Add active class to clicked pill
+                this.classList.remove('bg-primary-light', 'bg-secondary-light', 'bg-accent-light', 'bg-pastel-purple', 'bg-pastel-pink');
+                this.classList.remove('text-primary', 'text-secondary', 'text-accent', 'text-purple-600', 'text-pink-600');
+                this.classList.add('bg-primary', 'text-white');
+
+                // Filter courses
+                courseCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // Adjust for header height
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    if (mobileMenu && mobileMenu.classList.contains('show')) {
+                        mobileMenu.classList.remove('show');
+                    }
+                }
+            });
+        });
     </script>
 </body>
 
