@@ -25,6 +25,7 @@ use App\Http\Controllers\Student\StudentLessonController;
 use App\Http\Controllers\Student\TestSubmissionController;
 use App\Http\Controllers\Teacher\CourseStatisticsController;
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
+use App\Http\Controllers\Admin\StudentController as AdminStudentController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -42,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/profile', [AdminController::class, 'tests'])->name('profile');
         Route::resource('categories', AdminCategoryController::class);
         Route::resource('teachers', AdminTeacherController::class);
+        Route::resource('students', AdminStudentController::class);
+
     });
 
     Route::middleware('role:teacher')->group(function () {
