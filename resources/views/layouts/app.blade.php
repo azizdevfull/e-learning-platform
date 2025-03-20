@@ -7,6 +7,7 @@
     <title>EduTeach - @yield('title', 'Onlayn ta\'lim platformasi')</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    {{--
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -25,7 +26,8 @@
                 }
             }
         }
-    </script>
+    </script> --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Sizning CSS qismlaringiz shu yerda qoladi */
         body {
