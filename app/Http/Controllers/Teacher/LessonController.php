@@ -48,10 +48,10 @@ class LessonController extends Controller
             ->with('success', 'Dars muvaffaqiyatli qo‘shildi!');
     }
 
-    public function show($lessonId)
+    public function show($courseId, $lessonId)
     {
         $lesson = Lesson::findOrFail($lessonId);
-        $course = $lesson->course;
+        $course = Course::findOrFail($courseId);
         return view('teacher.lessons.show', compact('lesson', 'course'));
     }
     public function edit($courseId, $lessonId)

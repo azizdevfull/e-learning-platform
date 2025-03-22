@@ -6,14 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', "O'qituvchi Dashboard")</title>
 
-    <head>
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-    </head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- CKEditor 5 Classic va plaginlar -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+    <!-- Qo‘shimcha plaginlar uchun alohida skriptlar -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/translations/uz.js"></script> <!-- O‘zbekcha, agar kerak bo‘lsa -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     {{--
     <script src="https://cdn.tailwindcss.com"></script> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    @yield('styles')
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -455,6 +457,7 @@
             }, 1500);
         });
     </script>
+    @yield('scripts')
 </body>
 
 </html>

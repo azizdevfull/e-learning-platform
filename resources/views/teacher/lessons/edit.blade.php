@@ -42,12 +42,12 @@
                                 @enderror
                             </div>
 
-                            <!-- Lesson Content -->
+                            <!-- Lesson Content with CKEditor -->
                             <div>
                                 <label for="content" class="block text-sm font-medium text-gray-700">Dars matni</label>
                                 <textarea id="content" name="content"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary sm:text-sm @error('content') border-red-500 @enderror"
-                                    rows="5" required>{{ old('content', $lesson->content) }}</textarea>
+                                    rows="5">{{ old('content', $lesson->content) }}</textarea>
                                 @error('content')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -90,4 +90,93 @@
             </div>
         </div>
     </main>
+@endsection
+
+@section('scripts')
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#content'), {
+                toolbar: [
+                    'heading', '|',
+                    'bold', 'italic', 'underline', '|',
+                    'numberedList', 'bulletedList', '|',
+                    'link', 'insertTable', 'blockQuote', '|',
+                    'outdent', 'indent', '|',
+                    'undo', 'redo'
+                ],
+                heading: {
+                    options: [{
+                            model: 'paragraph',
+                            title: 'Paragraf',
+                            class: 'ck-heading_paragraph'
+                        },
+                        {
+                            model: 'heading1',
+                            view: 'h1',
+                            title: 'Sarlavha 1',
+                            class: 'ck-heading_heading1'
+                        },
+                        {
+                            model: 'heading2',
+                            view: 'h2',
+                            title: 'Sarlavha 2',
+                            class: 'ck-heading_heading2'
+                        },
+                        {
+                            model: 'heading3',
+                            view: 'h3',
+                            title: 'Sarlavha 3',
+                            class: 'ck-heading_heading3'
+                        },
+                        {
+                            model: 'heading4',
+                            view: 'h4',
+                            title: 'Sarlavha 4',
+                            class: 'ck-heading_heading4'
+                        },
+                        {
+                            model: 'heading5',
+                            view: 'h5',
+                            title: 'Sarlavha 5',
+                            class: 'ck-heading_heading5'
+                        },
+                        {
+                            model: 'heading6',
+                            view: 'h6',
+                            title: 'Sarlavha 6',
+                            class: 'ck-heading_heading6'
+                        }
+                    ]
+                },
+                link: {
+                    addTargetToExternalLinks: true,
+                    defaultProtocol: 'https://',
+                    decorators: {
+                        toggleDownloadable: {
+                            mode: 'manual',
+                            label: 'Yuklab olinadigan',
+                            attributes: {
+                                download: 'file'
+                            }
+                        }
+                    }
+                },
+                table: {
+                    contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties',
+                        'tableCellProperties'
+                    ]
+                },
+                placeholder: 'Dars matnini shu yerga kiriting!',
+                language: 'uz',
+            })
+            .then(editor => {
+                console.log('Editor muvaffaqiyatli ishga tushdi', editor);
+                // CKEditor yuklanganda required atributini olib tashlash
+                document.querySelector('#content').removeAttribute('required');
+            })
+            .catch(error => {
+                console.error('Xatolik yuz berdi:', error);
+            });
+    </script>
 @endsection

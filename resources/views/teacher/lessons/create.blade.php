@@ -25,7 +25,7 @@
 
                 <!-- Form -->
                 <div class="rounded-lg border bg-white shadow-sm p-6">
-                    <form action="{{ route('teacher.courses.lessons.store', $course->id) }}" method="POST"
+                    <form id="lessonForm" action="{{ route('teacher.courses.lessons.store', $course->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="space-y-6">
@@ -40,7 +40,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Content -->
+                            <!-- Content with CKEditor -->
                             <div>
                                 <label for="content" class="block text-sm font-medium text-gray-700">Dars matni</label>
                                 <textarea id="content" name="content" rows="6"
@@ -53,8 +53,8 @@
 
                             <!-- File Upload -->
                             <div>
-                                <label for="file" class="block text-sm font-medium text-gray-700">Fayl yuklash (PDF, DOCX,
-                                    MP4, JPG, PNG)</label>
+                                <label for="file" class="block text-sm font-medium text-gray-700">Fayl yuklash (PDF,
+                                    DOCX, MP4, JPG, PNG)</label>
                                 <input type="file" id="file" name="file"
                                     class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary-hover @error('file') border-red-500 @enderror">
                                 @error('file')
@@ -79,4 +79,93 @@
             </div>
         </div>
     </main>
+@endsection
+
+@section('scripts')
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#content'), {
+                toolbar: [
+                    'heading', '|',
+                    'bold', 'italic', 'underline', '|',
+                    'numberedList', 'bulletedList', '|',
+                    'link', 'insertTable', 'blockQuote', '|',
+                    'outdent', 'indent', '|',
+                    'undo', 'redo'
+                ],
+                heading: {
+                    options: [{
+                            model: 'paragraph',
+                            title: 'Paragraf',
+                            class: 'ck-heading_paragraph'
+                        },
+                        {
+                            model: 'heading1',
+                            view: 'h1',
+                            title: 'Sarlavha 1',
+                            class: 'ck-heading_heading1'
+                        },
+                        {
+                            model: 'heading2',
+                            view: 'h2',
+                            title: 'Sarlavha 2',
+                            class: 'ck-heading_heading2'
+                        },
+                        {
+                            model: 'heading3',
+                            view: 'h3',
+                            title: 'Sarlavha 3',
+                            class: 'ck-heading_heading3'
+                        },
+                        {
+                            model: 'heading4',
+                            view: 'h4',
+                            title: 'Sarlavha 4',
+                            class: 'ck-heading_heading4'
+                        },
+                        {
+                            model: 'heading5',
+                            view: 'h5',
+                            title: 'Sarlavha 5',
+                            class: 'ck-heading_heading5'
+                        },
+                        {
+                            model: 'heading6',
+                            view: 'h6',
+                            title: 'Sarlavha 6',
+                            class: 'ck-heading_heading6'
+                        }
+                    ]
+                },
+                link: {
+                    addTargetToExternalLinks: true,
+                    defaultProtocol: 'https://',
+                    decorators: {
+                        toggleDownloadable: {
+                            mode: 'manual',
+                            label: 'Yuklab olinadigan',
+                            attributes: {
+                                download: 'file'
+                            }
+                        }
+                    }
+                },
+                table: {
+                    contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties',
+                        'tableCellProperties'
+                    ]
+                },
+                placeholder: 'Dars matnini shu yerga kiriting!',
+                language: 'uz',
+            })
+            .then(editor => {
+                console.log('Editor muvaffaqiyatli ishga tushdi', editor);
+                // CKEditor yuklanganda required atributini olib tashlash
+                document.querySelector('#content').removeAttribute('required');
+            })
+            .catch(error => {
+                console.error('Xatolik yuz berdi:', error);
+            });
+    </script>
 @endsection
